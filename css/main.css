@@ -959,6 +959,7 @@ body {
   background: #222;
   border-bottom: none;
   font-family: Lato, "Microsoft Jhenghei", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  border-radius: 3px;
 }
 .logo {
   display: inline-block;
@@ -1179,7 +1180,7 @@ input.menu-search-input {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #f0ffbd;
+  background: #1fdd53;
 }
 .sidebar-nav {
   margin: 0;
@@ -1938,4 +1939,16 @@ input.menu-search-input {
 .category-all-page .category-list-count:after {
   display: inline;
   content: ") ";
+}
+.header-inner {
+  padding: 90px 0 70px;
+}
+.back-to-top {
+  transition: transform 0.5s;
+}
+.back-to-top:hover {
+  transform: rotate(360deg);
+}
+.brand {
+  box-shadow: 0 0 5px #000;
 }
