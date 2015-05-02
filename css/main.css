@@ -189,7 +189,7 @@ body {
   font-size: 16px;
   line-height: 1.8;
   color: #555;
-  background: #fff;
+  background: #efefef;
 }
 @media (min-width: 768px) and (max-width: 991px) {
   body {
@@ -265,7 +265,7 @@ p {
   margin: 20px 0;
 }
 a {
-  color: #222;
+  color: #39c;
   text-decoration: none;
   border-bottom: 1px solid #999;
 }
@@ -341,7 +341,7 @@ dd {
 }
 .highlight a,
 .gist a {
-  color: #222 !important;
+  color: #39c !important;
   text-decoration: none !important;
 }
 .video-container {
@@ -726,12 +726,12 @@ td {
 }
 .post pre,
 .post .highlight {
-  background: #2d2d2d;
+  background: #1d1f21;
   margin: 20px 0;
   padding: 15px;
   overflow: auto;
   font-size: 13px;
-  color: #ccc;
+  color: #c5c8c6;
   line-height: 1.8;
 }
 .post .highlight .gutter pre,
@@ -767,7 +767,7 @@ td {
 }
 .post .highlight figcaption {
   font-size: 0.85em;
-  color: #999;
+  color: #969896;
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -792,9 +792,9 @@ td {
 .post .gist {
   margin: 20px 0;
   border-style: solid;
-  border-color: #ccc;
+  border-color: #39c;
   border-width: 1px 0;
-  background: #2d2d2d;
+  background: #1d1f21;
   padding: 15px 40px 15px 15px;
 }
 .post .gist .gist-file {
@@ -820,8 +820,8 @@ td {
   border: none;
 }
 .post .gist .gist-file .gist-meta {
-  background: #2d2d2d;
-  color: #999;
+  background: #1d1f21;
+  color: #969896;
   font: 13px Lato, "Microsoft Jhenghei", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   text-shadow: 0 0;
   padding: 0;
@@ -836,7 +836,7 @@ td {
   text-decoration: underline;
 }
 pre .comment {
-  color: #999;
+  color: #969896;
 }
 pre .variable,
 pre .attribute,
@@ -850,7 +850,7 @@ pre .html .doctype,
 pre .css .id,
 pre .css .class,
 pre .css .pseudo {
-  color: #f2777a;
+  color: #c66;
 }
 pre .number,
 pre .preprocessor,
@@ -858,11 +858,11 @@ pre .built_in,
 pre .literal,
 pre .params,
 pre .constant {
-  color: #f99157;
+  color: #de935f;
 }
 pre .ruby .class .title,
 pre .css .rules .attribute {
-  color: #9c9;
+  color: #b5bd68;
 }
 pre .string,
 pre .value,
@@ -870,11 +870,11 @@ pre .inheritance,
 pre .header,
 pre .ruby .symbol,
 pre .xml .cdata {
-  color: #9c9;
+  color: #b5bd68;
 }
 pre .title,
 pre .css .hexcolor {
-  color: #6cc;
+  color: #8abeb7;
 }
 pre .function,
 pre .python .decorator,
@@ -884,11 +884,11 @@ pre .ruby .title .keyword,
 pre .perl .sub,
 pre .javascript .title,
 pre .coffeescript .title {
-  color: #69c;
+  color: #81a2be;
 }
 pre .keyword,
 pre .javascript .function {
-  color: #c9c;
+  color: #b294bb;
 }
 html,
 body {
@@ -901,23 +901,23 @@ body {
 .header-inner {
   margin: 0 auto;
   padding: 100px 0 70px;
-  width: 960px;
+  width: 980px;
 }
 .one-column .header-inner {
-  width: 700px;
+  width: 760px;
 }
 .main {
   padding-bottom: 150px;
 }
 .main-inner {
   margin: 0 auto;
-  width: 960px;
+  width: 980px;
 }
 .one-column .main-inner {
-  width: 700px;
+  width: 760px;
 }
 .main-inner .content {
-  width: 700px;
+  width: 760px;
 }
 .footer {
   position: absolute;
@@ -928,17 +928,17 @@ body {
 }
 .footer-inner {
   margin: 20px auto;
-  width: 960px;
+  width: 980px;
 }
 .one-column .footer-inner {
-  width: 700px;
+  width: 760px;
 }
 .headband {
   height: 3px;
-  background: #222;
+  background: #39c;
 }
 .header {
-  background: #fff;
+  background: #efefef;
 }
 .header-inner {
   position: relative;
@@ -1110,7 +1110,7 @@ input.menu-search-input {
 }
 .site-author-name {
   margin: 5px 0 0;
-  color: #f5f5f5;
+  color: #efefef;
 }
 .site-description {
   margin-top: 5px;
@@ -1180,7 +1180,7 @@ input.menu-search-input {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #1fdd53;
+  background: #ffd03b;
 }
 .sidebar-nav {
   margin: 0;
@@ -1193,7 +1193,7 @@ input.menu-search-input {
   font-size: 15px;
 }
 .sidebar-nav li:hover {
-  color: #f5f5f5;
+  color: #efefef;
 }
 .page-post-detail .sidebar-nav-toc {
   padding: 0 5px;
@@ -1325,18 +1325,19 @@ input.menu-search-input {
   padding: 0 20px;
   font-size: 15px;
   color: #fff;
-  background: #222;
-  border: 2px solid #222;
+  background: #39c;
+  border: 2px solid #39c;
   text-decoration: none;
-  transition-property: background-color;
+  transition-property: all;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
 .btn:hover {
-  border-color: #222;
-  color: #222;
-  background: #fff;
+  border-color: #39c;
+  color: #fff;
+  background: #39c;
+  box-shadow: 0 0 15px #39c;
 }
 .posts-expand {
   padding-top: 40px;
@@ -1367,7 +1368,7 @@ input.menu-search-input {
 .posts-expand .post-title-link {
   display: inline-block;
   position: relative;
-  color: #555;
+  color: #222;
   border-bottom: none;
   line-height: 1.2;
   vertical-align: top;
@@ -1636,7 +1637,7 @@ input.menu-search-input {
 .pagination .prev:hover,
 .pagination .next:hover,
 .pagination .page-number:hover {
-  border-top-color: #222;
+  border-top-color: #39c;
 }
 .pagination .space {
   padding: 0;
@@ -1667,7 +1668,7 @@ input.menu-search-input {
   .pagination .prev:hover,
   .pagination .next:hover,
   .pagination .page-number:hover {
-    border-bottom-color: #222;
+    border-bottom-color: #39c;
   }
 }
 .comments {
@@ -1884,7 +1885,7 @@ input.menu-search-input {
   margin-left: -2px;
   width: 4px;
   height: 100%;
-  background: #f5f5f5;
+  background: #efefef;
   z-index: -1;
 }
 .page-archive .posts-collapse .archive-move-on {
@@ -1949,6 +1950,23 @@ input.menu-search-input {
 .back-to-top:hover {
   transform: rotate(360deg);
 }
+@-webkit-keyframes brand-shining {
+  0% {
+    box-shadow: 0 0 30px #000;
+    color: #87daff;
+  }
+  50% {
+    box-shadow: 0 0 30px #39c;
+    color: #fff;
+  }
+  100% {
+    box-shadow: 0 0 30px #000;
+    color: #87daff;
+  }
+}
 .brand {
-  box-shadow: 0 0 5px #000;
+  transition: all 1s;
+  box-shadow: 0 0 10px #39c;
+  color: #87daff;
+  -webkit-animation: brand-shining infinite 5s;
 }
