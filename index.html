@@ -150,14 +150,14 @@
           <p>继上一篇见识过其配合promise带来的超爽的异步编程体验，我想应该大部分同学都会想好好看一下，到底这个Generator是什么？接下来我们会对Generator的特性进行剖析，让我们对接下来学习<code>co</code>源码打个扎实的基础。</p>
 <h1 id="Generator基础">Generator基础</h1><hr>
 <h2 id="起源">起源</h2><p>我们首先得知道，Generator一开始并不是用来做异步编程的，是后来的大牛们挖掘了它的特性，让它在异步编程里大放异彩。其实Generator是生成遍历器的构造器，ES6定义了一个遍历器的接口Iterator。任何数据结构满足Iterator接口，都可以统一实现遍历操作。一步一步的调用<code>next()</code>或者<code>for..of</code>循环都可以遍历实现Iterator接口的数据结构。</p>
-<p>我们主要说一下遍历对象的<code>next()</code>是怎样的：</p>
+<p>我们简单说一下遍历对象的<code>next()</code>是怎样的：</p>
 <ol>
 <li>第一次调用<code>next()</code>会直接指向第一个数据的位置，然后返回数据的信息。结构是这样的：<code>{value: AnyType, done: Boolean}</code>。<code>value</code>属性是指该数据的值，<code>done</code>则是标志是否已经true，结束了。</li>
 <li>再一次调用<code>next()</code>则指向下一个数据，返回相应的数据信息。</li>
 <li>重复第二步，一直到数据结束，返回<code>{value: undefined, done: true}</code>。则表示遍历已经全部完成。</li>
 </ol>
 <p>这就是Iterator最基本的实现，当然这里是很片面的，若要展开说，基本又是一大篇文章可以写。这里就直接给出阮一峰老师关于Iterator的文章：<a href="es6.ruanyifeng.com">10. Iterator和for…of循环</a></p>
-<h2 id="定义">定义</h2><p>在我们知道了Generator生成的遍历对象是什么之后，我们看一下如何定义这样的Generator函数。对上一篇有印象的同学，应该记得函数标识符后面有一个诡异的星号<code>function* ()</code>。其实这个星号在括号前也是没关系的，这里我是参考了<code>co</code>源码的。我们一旦定义了一个带星号的函数之后，用这个构造器生成的对象在harmony模式里就成了Generator对象。我们可以测试一下一段代码。</p>
+<h2 id="定义">定义</h2><p>在我们知道了Generator生成的遍历对象是什么之后，我们看一下如何定义这样的Generator函数。对上一篇有印象的同学，应该记得函数标识符后面有一个诡异的星号<code>function* ()</code>。其实这个星号在括号前也是没关系的，这里我是参考了<code>co</code>源码的。我们一旦定义了一个带星号的函数之后，用这个构造器生成的对象在harmony模式里就成了Generator对象（下面我会称其为遍历器）。我们可以测试一下一段代码。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> toString = <span class="built_in">Object</span>.prototype.toString;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = Generator(); <span class="comment">// 可以省去new来创建对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(Generator)); <span class="comment">// [object Function]</span></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(gen));       <span class="comment">// [object Generator]</span></span><br></pre></td></tr></table></figure>
 <p>这样我们通过调用特殊定义的Generator构造器，生成一个遍历器([object Generator])。那我们要遍历的话必须得知道遍历的每个成员，<code>yield</code>就是用来定义遍历成员的。也就是说，遍历器进行遍历的时候会以<code>yield</code>为间隔，一个<code>yield</code>一个成员，不断往下走直到不存在下一个<code>yield</code>。</p>
 <p>在上面的例子中，就是第一次遍历到<code>yield</code>得到”hello”，第二次继续执行遍历操作到<code>yield</code>得到”world”，最后再执行就发现没有了，也就是<code>done: true</code>结束遍历。</p>
