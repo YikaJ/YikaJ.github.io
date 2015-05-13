@@ -18,7 +18,7 @@
 
 
 
-  <meta name="keywords" content="Generator,javascript,异步编程," />
+  <meta name="keywords" content="Generator,co,javascript,异步编程," />
 
 
 
@@ -39,7 +39,7 @@
   </script>
 
 
-  <title> 异步编程之Generator(2)——剖析特性 // Yika J's Blog </title>
+  <title> 异步编程之Generator(1)——领略魅力 // Yika J's Blog </title>
 </head>
 
 <body>
@@ -110,7 +110,7 @@
           
           
             
-              异步编程之Generator(2)——剖析特性
+              异步编程之Generator(1)——领略魅力
             
           
         </h1>
@@ -118,7 +118,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-07
+          发表于 2015-05-05
         </span>
 
         
@@ -127,8 +127,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/05/08/异步编程之Generator(2)——剖析特性/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/08/异步编程之Generator(2)——剖析特性/"></span>
+            <a href="/2015/05/06/异步编程之Generator（1）——领略魅力/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/06/异步编程之Generator（1）——领略魅力/"></span>
             </a>
           </span>
           
@@ -142,47 +142,48 @@
       
 
       
-        <p>继上一篇见识过其配合promise带来的超爽的异步编程体验，我想应该大部分同学都会想好好看一下，到底这个Generator是什么？接下来我们会对Generator的特性进行剖析，让我们对接下来学习<code>co</code>源码打个扎实的基础。</p>
-<h1 id="Generator基础">Generator基础</h1><hr>
-<h2 id="起源">起源</h2><p>我们首先得知道，Generator一开始并不是用来做异步编程的，是后来的大牛们挖掘了它的特性，让它在异步编程里大放异彩。其实Generator是生成遍历器的构造器，ES6定义了一个遍历器的接口Iterator。任何数据结构满足Iterator接口，都可以统一实现遍历操作。一步一步的调用<code>next()</code>或者<code>for..of</code>循环都可以遍历实现Iterator接口的数据结构。</p>
-<p>我们简单说一下遍历对象的<code>next()</code>是怎样的：</p>
+        <h1 id="为何使用Generator">为何使用Generator</h1><hr>
+<p>回顾一下我们之前学习的promise。我们巧妙利用了<code>promise/deferred</code>模式，用链式结构代替了嵌套回调的结构，大大缓解了回调地狱。我们再来看看之前我们举的那个异步串行队列的例子吧！假设我们有一个<code>hello.txt</code>，里面存了一个JSON文件的文件名，我们需要得到JSON文件的message属性的值。步骤如下：</p>
 <ol>
-<li>第一次调用<code>next()</code>会直接指向第一个数据的位置，然后返回数据的信息。结构是这样的：<code>{value: AnyType, done: Boolean}</code>。<code>value</code>属性是指该数据的值，<code>done</code>则是标志是否已经true，结束了。</li>
-<li>再一次调用<code>next()</code>则指向下一个数据，返回相应的数据信息。</li>
-<li>重复第二步，一直到数据结束，返回<code>{value: undefined, done: true}</code>。则表示遍历已经全部完成。</li>
+<li>读取<code>hello.txt</code>文件</li>
+<li>得到JSON文件名,再次读取文件</li>
+<li>得到JSON数据后，进行JSON解析</li>
+<li>获得JSON的message属性 </li>
 </ol>
-<p>这就是Iterator最基本的实现，当然这里是很片面的，若要展开说，基本又是一大篇文章可以写。这里就直接给出阮一峰老师关于Iterator的文章：<a href="es6.ruanyifeng.com">10. Iterator和for…of循环</a></p>
-<h2 id="定义">定义</h2><p>在我们知道了Generator生成的遍历对象是什么之后，我们看一下如何定义这样的Generator函数。对上一篇有印象的同学，应该记得函数标识符后面有一个诡异的星号<code>function* ()</code>。其实这个星号在括号前也是没关系的，这里我是参考了<code>co</code>源码的。我们一旦定义了一个带星号的函数之后，用这个构造器生成的对象在harmony模式里就成了Generator对象（下面我会称其为遍历器）。我们可以测试一下一段代码。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> toString = <span class="built_in">Object</span>.prototype.toString;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = Generator(); <span class="comment">// 可以省去new来创建对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(Generator)); <span class="comment">// [object Function]</span></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(gen));       <span class="comment">// [object Generator]</span></span><br></pre></td></tr></table></figure>
-<p>这样我们通过调用特殊定义的Generator构造器，生成一个遍历器([object Generator])。那我们要遍历的话必须得知道遍历的每个成员，<code>yield</code>就是用来定义遍历成员的。也就是说，遍历器进行遍历的时候会以<code>yield</code>为间隔，一个<code>yield</code>一个成员，不断往下走直到不存在下一个<code>yield</code>。</p>
-<p>在上面的例子中，就是第一次遍历到<code>yield</code>得到”hello”，第二次继续执行遍历操作到<code>yield</code>得到”world”，最后再执行就发现没有了，也就是<code>done: true</code>结束遍历。</p>
-<p>接下来我们会详细说一下，遍历器是遍历的各种特性。</p>
+<h2 id="Promise链式调用">Promise链式调用</h2><p>这个例子我们之前也是举过非常多次的，我们尝试使用Promise链式结构完成：</p>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里的readFile已经是promise化的异步API</span></span><br><span class="line">readFile(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(filename)</span>&#123;</span></span><br><span class="line">        <span class="keyword">return</span> readFile(filename, <span class="string">'utf-8'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="transposed_variable">JSON.</span>parse)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(data)</span>&#123;</span></span><br><span class="line">        <span class="transposed_variable">console.</span>log(<span class="transposed_variable">data.</span>message);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(err)</span>&#123;</span></span><br><span class="line">        <span class="transposed_variable">console.</span>error(<span class="transposed_variable">err.</span>message);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>这样一看下来，promise好像并没有多大问题，思维是线性的，而且错误处理也很友好。我们只需要把上一层执行后的结果通过<code>then()</code>传到下一步执行即可。嗯，但不得不说被链式结构束缚后，我们并没有得到一种酣畅淋漓的编程体验。</p>
+<h2 id="同步API">同步API</h2><p>我们要写的爽，当然是要将异步编程得到同步编程的体验，这样我们直接使用同步API看一下是怎样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> filename = fs.readFileSync(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>);</span><br><span class="line"><span class="keyword">var</span> json = fs.readFileSync(filename, <span class="string">'utf-8'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.parse(json).message);</span><br></pre></td></tr></table></figure>
+<p>同步的写法清晰明了，而且更符合我们以往的编程习惯。但是同步API阻塞代码这个弊病会在Javascript的单线程执行中非常明显。我们到底有没有一种既可以非常接近同步编程的写法，又可以异步不阻塞代码执行呢？既然问出这种问题，答案当然是有的，就是今天的主角：<strong><em>Generator</em></strong>。</p>
 <a id="more"></a>
-<h1 id="Generator特性">Generator特性</h1><hr>
-<h2 id="遍历">遍历</h2><p>我们需要执行遍历，首先就是要得到遍历器。前面也说过了，就是调用Generator构造器生成的。然后该遍历器会有一个方法<code>next()</code>用来进行遍历操作，并且每一次的操作都会在<code>yield</code>处停止，并等待下一次的<code>next()</code>指令。我们看一看刚才的代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = <span class="keyword">new</span> Generator();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'hello', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'world', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: undefined, done: true &#125;</span></span><br></pre></td></tr></table></figure>
-<p>我们可以看到最后当<code>done: true</code>时，<code>value</code>是undefined。其实我们return出去一个值，就会成为该<code>value</code>的值。其实换一个角度更加有意思，就是当你return出一个值，这个值必定是<code>done: true</code>。我们可以改一下上面的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"world"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"!"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = <span class="keyword">new</span> Generator();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'hello', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'world', done: true &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: undefined, done: true &#125;</span></span><br></pre></td></tr></table></figure>
-<p>我们可以看到，如果遍历器去找感叹号的<code>yield</code>话，应该是<code>value: &#39;!&#39;</code>。但是因为提前return结束了遍历器，所以最后得到了<code>{ value: &#39;world&#39;, done: true }</code>。</p>
-<h2 id="yield传值">yield传值</h2><p>我们知道了每一次遍历器执行到<code>yield</code>处后，会把值放在一个对象中的属性中返回出去。但是我们在Generator构造器里怎么利用这个值呢？其实我们可以为遍历器的<code>next(res)</code>传入一个参数，这个参数将会成为这一次<code>yield</code>的值。乍一看，好像不大清楚，看看代码就懂了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> hello = <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(hello);           <span class="comment">// hi</span></span><br><span class="line">    <span class="keyword">var</span> world = <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(world);           <span class="comment">// undefined</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = <span class="keyword">new</span> Generator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> first = gen.next(<span class="string">"nothing"</span>);</span><br><span class="line"><span class="keyword">var</span> second = gen.next(<span class="string">"hi"</span>);</span><br><span class="line"><span class="keyword">var</span> third = gen.next();</span><br></pre></td></tr></table></figure>
-<p>我们第一次<code>next()</code>相当于启动器，这个时候传入任何参数都是被忽略的，因为这个参数无法作为上一个<code>yield</code>的值（没有上一个）。到我们第二次的<code>next(&quot;hi&quot;)</code>，传入了一个”hi”字符串，这个参数就成为了<code>yield</code>的值，直接赋值给hello变量并打印出来。我们最后一个world变量是undefined，是因为<code>next()</code>并没有传入任何参数。可以这么说，每一次遍历器遍历得到的成员的值，和<code>yield</code>的值是没有必然联系的。</p>
-<p>所以我们看代码的执行顺序也是很有趣的一件事，遍历器会执行到语句<code>yield</code>右侧即停止。等到下一次<code>next()</code>启动，然后才会根据<code>yield</code>得到的值，对语句左侧变量进行赋值。这样想的话，如果我们下一次<code>yield</code>语句，依赖第一次的值，我们就需要在<code>next()</code>里传入上一次的<code>value</code>。我们对上一次的代码做个小小的添加。</p>
-<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> <span class="built_in">first</span> = gen.<span class="built_in">next</span>(<span class="string">"nothing"</span>);</span><br><span class="line"><span class="built_in">var</span> second = gen.<span class="built_in">next</span>(<span class="string">"hi"</span>);</span><br><span class="line"><span class="built_in">var</span> third = gen.<span class="built_in">next</span>(second.<span class="built_in">value</span>); <span class="comment">//构造函数的world变量值也会是"hi"。</span></span><br></pre></td></tr></table></figure>
-<p>这个是Generator非常重要的特性，下去要好好实践一番，加深印象。接下来<code>co</code>源码分析，这个特性配合promise可以放华丽的大招。</p>
-<h2 id="遍历遍历器里的遍历器">遍历遍历器里的遍历器</h2><p>我起这个标题挺有意思的，哈哈哈。其实就和递归栈差不多，也就是说，当<code>yield</code>的是另一个遍历器，那么代码会进入到另一个遍历器里，直到结束后，才交回代码控制权。看一看咯：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span>  <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">yield</span> *anotherGen;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"hello world"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> AnotherGenerator = <span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"强势插入！"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"不给hello world！"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = <span class="keyword">new</span> Generator();</span><br><span class="line"><span class="keyword">var</span> anotherGen = <span class="keyword">new</span> AnotherGenerator();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'hello', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: '强势插入！', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: '不给hello world！', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'world', done: false &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(gen.next()); <span class="comment">// &#123; value: 'hello world', done: true &#125;</span></span><br></pre></td></tr></table></figure>
-<p>当我们需要遍历一个遍历器，那么<code>*</code>也是需要的，可以参考一下上面。</p>
-<h1 id="总结">总结</h1><hr>
-<p>我们知道了遍历对象遍历时得到的什么，还有<code>next(res)</code>传入参数有什么用，这对接下来的分析有着至关重要的作用。到这里，对Generator分析已经是差不多了。如果想要更深入了解的，可以去阮老师的博客看一看：<a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="external">11. Generator函数</a>。</p>
-<p>接下来一篇文章就是对<code>co</code>源码的分析，先预习和复习一些东西吧。我们回顾一下promise，我们在将一个异步操作promise化后，当我们调用这个异步操作，我们会得到一个promise对象。所以我们可以想象一下：</p>
-<ol>
-<li>我们调用遍历器的<code>next()</code>得到该异步的promise对象</li>
-<li>在promise对象的<code>then()</code>中的<code>resolve</code>对数据进行处理</li>
-<li>把数据作为参数传入<code>next(res)</code>，进行下一次异步操作</li>
-<li>直到迭代器的<code>done: true</code>，结束遍历。</li>
+<h2 id="Generator使用co写法">Generator使用co写法</h2><p>Generator，顾名思义是一个构造器，它本身是用来生成迭代器的。它是ES6的新东西，所以你为了使用它，需要在node中开启harmony模式才能体验到它。</p>
+<p><code>$ node --harmony</code></p>
+<p>基于Generator，TJ大神做了一个<code>co</code>库。<code>co</code>在最新的版本里，结合Generator和Promise改善了异步编程的体验，也就是我们之前说的：<strong><em>既可以同步，又不会阻塞</em></strong>。</p>
+<p>还是一样的例子，我们结合promise的代码和同步API的代码对比看看：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">co(<span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> filename = <span class="keyword">yield</span> readFile(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">var</span> json = <span class="keyword">yield</span> readFile(filename, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(json).message;</span><br><span class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error);</span><br></pre></td></tr></table></figure>
+<p>非常像有没有，我们不再需要将每一次异步的结果都放在<code>then()</code>中进行处理，我们可以通过类似于同步的写法调用Promise异步API，大大提升编程体验。最后<code>co()</code>返回了一个promise对象，提供我们做最后的数据处理和错误处理。我们从同步API转到<code>co</code>，仅仅需要做到以下几点：</p>
+<ul>
+<li>co里面传的函数标识符需要加上<em>号，`function</em>`。这也就是Generator函数</li>
+<li>调用promise异步API之前，都要加上<code>yield</code>标识符</li>
+<li>将需要做最后处理的数据<code>return</code>出来，在<code>then()</code>中进行处理即可</li>
+</ul>
+<h1 id="预习Generator">预习Generator</h1><hr>
+<p>我们在举完异步串行的例子后，这次的文章就接近尾声了。最后我们可以大致了解一下<code>co</code>到底是如何运作的呢？我们会在接下来的文章进行深究，这一次就简单说一说，你当作预习就可以了：</p>
+<h2 id="Generator相关">Generator相关</h2><ol>
+<li>Generator生成迭代器后，等待迭代器的<code>next()</code>指令启动。</li>
+<li>启动迭代器后，代码会运行到yield处停止。并返回一个<code>{value: AnyType, done: Boolean}</code>对象，<code>value</code>是这次执行的结果，<code>done</code>是迭代是否结束。并等待下一次的<code>next()</code>指令。</li>
+<li><code>next()</code>再次启动后。若<code>done</code>属性不为true，则可以继续从上一次停止的地方继续迭代。</li>
+<li>一直重复2，3步骤，直到<code>done</code>为true。</li>
 </ol>
-<p>这样我们就可以一环扣一环的将Generator函数里的异步操作进行迭代，形成一种异步编程同步写法的优良体验。当然我们这里不会详细说，如何去实现，因为我会在下一篇好好讲讲。</p>
+<h2 id="co相关">co相关</h2><ol>
+<li>co内部的迭代器对象是被封装成Promise的。</li>
+<li><code>yield</code>后面跟的必须是一个promise化的异步API，所以<code>next()</code>得到的结果是一个promise对象。</li>
+<li>若迭代没有结束，则<code>co</code>会自动为该异步promise对象的<code>resolve</code>中，增添一个<code>next()</code>。通过前面的异步执行完回调后，再调用<code>next()</code>，使迭代器的代码不断向前执行。</li>
+<li>若迭代结束，则直接调用整个迭代器对象的<code>resolve</code>。</li>
+</ol>
+<h2 id="总结">总结</h2><p>或许现在大家看的是一知半解，或许很兴奋想知道更多相关的。若仅仅是想学会用co，我想上面的大概已经足够你看了。但是想更深入，你必须先弄懂promise的原理和Generator的相关特性。最后使用<code>co</code>库一定会得心应手。</p>
+<p>接下来，我会先讲一些关于Generator的相关特性，再配合之前说过的promise，深入到<code>co</code>的源码学习中。</p>
 
       
     </div>
@@ -192,6 +193,8 @@
         <div class="post-tags">
           
             <a href="/tags/Generator/"> #Generator </a>
+          
+            <a href="/tags/co/"> #co </a>
           
             <a href="/tags/javascript/"> #javascript </a>
           
@@ -204,13 +207,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/05/12/异步编程之co——源码分析/">异步编程之co——源码分析</a>
+              <a href="/2015/05/08/异步编程之Generator（2）——剖析特性/">异步编程之Generator(2)——剖析特性</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/05/06/异步编程之Generator(1)——领略魅力/">异步编程之Generator(1)——领略魅力</a>
+              <a href="/2015/05/02/异步编程之Promise（3）：拓展进阶/">异步编程之Promise(3)：拓展进阶</a>
             
           </div>
         </div>
@@ -329,7 +332,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Generator基础"><span class="nav-number">1.</span> <span class="nav-text">Generator基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#起源"><span class="nav-number">1.1.</span> <span class="nav-text">起源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.2.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Generator特性"><span class="nav-number">2.</span> <span class="nav-text">Generator特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历"><span class="nav-number">2.1.</span> <span class="nav-text">遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yield传值"><span class="nav-number">2.2.</span> <span class="nav-text">yield传值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历遍历器里的遍历器"><span class="nav-number">2.3.</span> <span class="nav-text">遍历遍历器里的遍历器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为何使用Generator"><span class="nav-number">1.</span> <span class="nav-text">为何使用Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise链式调用"><span class="nav-number">1.1.</span> <span class="nav-text">Promise链式调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步API"><span class="nav-number">1.2.</span> <span class="nav-text">同步API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator使用co写法"><span class="nav-number">1.3.</span> <span class="nav-text">Generator使用co写法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预习Generator"><span class="nav-number">2.</span> <span class="nav-text">预习Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator相关"><span class="nav-number">2.1.</span> <span class="nav-text">Generator相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co相关"><span class="nav-number">2.2.</span> <span class="nav-text">co相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -899,8 +902,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'YikaJ';
-      var disqus_identifier = '2015/05/08/异步编程之Generator(2)——剖析特性/';
-      var disqus_url = 'http://yoursite.com/2015/05/08/异步编程之Generator(2)——剖析特性/';
+      var disqus_identifier = '2015/05/06/异步编程之Generator（1）——领略魅力/';
+      var disqus_url = 'http://yoursite.com/2015/05/06/异步编程之Generator（1）——领略魅力/';
 
       (function(){
         var dsq = document.createElement('script');
