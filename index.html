@@ -149,12 +149,12 @@
         
           <p>异步编程系列教程：</p>
 <ol>
-<li><a href="">(翻译)异步编程之Promise(1)——初见魅力</a></li>
-<li><a href="">异步编程之Promise(2)：探究原理</a></li>
-<li><a href="">异步编程之Promise(3)：拓展进阶</a></li>
-<li><a href="">异步编程之Generator(1)——领略魅力</a></li>
-<li><a href="">异步编程之Generator(2)——剖析特性</a></li>
-<li><a href="">异步编程之co——源码分析</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
 </ol>
 <h1 id="如何使用co">如何使用co</h1><hr>
 <p>大家如果能消化掉前面的知识，相信这一章的分析也肯定是轻轻松松的。我们这一章就来说说，我们之前一直高调提到的<code>co</code>库。<code>co</code>库，它用Generator和Promise相结合，完美提升了我们异步编程的体验。我们首先看看如何使用<code>co</code>的，我们仍旧以之前的读取Json文件的例子看看：</p>
@@ -258,8 +258,17 @@
 
       
         
-          <p>继上一篇见识过其配合promise带来的超爽的异步编程体验，我想应该大部分同学都会想好好看一下，到底这个Generator是什么？接下来我们会对Generator的特性进行剖析，让我们对接下来学习<code>co</code>源码打个扎实的基础。</p>
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
 <h1 id="Generator基础">Generator基础</h1><hr>
+<p>继上一篇见识过其配合promise带来的超爽的异步编程体验，我想应该大部分同学都会想好好看一下，到底这个Generator是什么？接下来我们会对Generator的特性进行剖析，让我们对接下来学习<code>co</code>源码打个扎实的基础。</p>
 <h2 id="起源">起源</h2><p>我们首先得知道，Generator一开始并不是用来做异步编程的，是后来的大牛们挖掘了它的特性，让它在异步编程里大放异彩。其实Generator是生成遍历器的构造器，ES6定义了一个遍历器的接口Iterator。任何数据结构满足Iterator接口，都可以统一实现遍历操作。一步一步的调用<code>next()</code>或者<code>for..of</code>循环都可以遍历实现Iterator接口的数据结构。</p>
 <p>我们简单说一下遍历对象的<code>next()</code>是怎样的：</p>
 <ol>
@@ -352,7 +361,16 @@
 
       
         
-          <h1 id="为何使用Generator">为何使用Generator</h1><hr>
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="为何使用Generator">为何使用Generator</h1><hr>
 <p>回顾一下我们之前学习的promise。我们巧妙利用了<code>promise/deferred</code>模式，用链式结构代替了嵌套回调的结构，大大缓解了回调地狱。我们再来看看之前我们举的那个异步串行队列的例子吧！假设我们有一个<code>hello.txt</code>，里面存了一个JSON文件的文件名，我们需要得到JSON文件的message属性的值。步骤如下：</p>
 <ol>
 <li>读取<code>hello.txt</code>文件</li>
@@ -447,7 +465,16 @@
 
       
         
-          <h1 id="拓展功能">拓展功能</h1><hr>
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="拓展功能">拓展功能</h1><hr>
 <p>在前面的文章中，通过了解promise能做什么，实践动手从原理上了解<code>promise/deferred</code>模式的用法，相信大家应该更期待这次的功能拓展。我们不仅需要让单异步操作promise化，我们还需要从实际出发，拓展更多有用的功能。直接看一下我们这一次需要做的两个功能：</p>
 <ol>
 <li>多异步并行控制</li>
@@ -537,8 +564,17 @@
 
       
         
-          <p>在异步编程之Promise(1)里，我是翻译了一篇文章，里面是探究promise的模式和领略它的魅力。我们可以利用promise，缓解回调函数给我们带来的回调金字塔。使用链式结构书写，使代码更加简洁易懂，易于控制。但是对于构造promise和其内部的实现，却用草草的一句<code>new Promise()</code>就带过。这一次，借着阅读朴灵大神的《深入浅出Node.Js》，我们自己动手实现一个小小的基本的promise吧。</p>
-<h2 id="动手实现Promise对象">动手实现Promise对象</h2><p>首先我们需要回顾一下，一个Promise/A模式和API上是如何定义的：</p>
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="动手实现Promise">动手实现Promise</h1><p>在异步编程之Promise(1)里，我是翻译了一篇文章，里面是探究promise的模式和领略它的魅力。我们可以利用promise，缓解回调函数给我们带来的回调金字塔。使用链式结构书写，使代码更加简洁易懂，易于控制。但是对于构造promise和其内部的实现，却用草草的一句<code>new Promise()</code>就带过。这一次，借着阅读朴灵大神的《深入浅出Node.Js》，我们自己动手实现一个小小的基本的promise吧。</p>
+<h2 id="构建Promise对象">构建Promise对象</h2><p>首先我们需要回顾一下，一个Promise/A模式和API上是如何定义的：</p>
 <ul>
 <li>Promise分别有三个状态：pending初始状态，fulfilled完成状态，rejected失败状态。</li>
 <li>一旦promise是fulfilled状态或rejected状态，那么它就是不会再改变的。</li>
@@ -632,6 +668,15 @@
         
           <p>原文：<a href="https://www.promisejs.org/">https://www.promisejs.org/</a></p>
 <p>by Forbes Lindesay </p>
+<p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
 <h1 id="动机">动机</h1><hr>
 <p>思考一下，下面这段用来读取文件并解析JSON的Javascript同步代码。它很简单并且易于阅读，但是因为它会阻塞代码，你并不会想用在大多数的应用里。这意味着，当你用它来读取文件的时候（它需要很多时间）不会有其他的事情发生。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSONSync</span><span class="params">(filename)</span></span>&#123;</span><br><span class="line">	<span class="comment">// 读取文件后，再解析成JSON</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(fs.readFileSync(filename, <span class="string">'utf-8'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
