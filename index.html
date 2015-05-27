@@ -112,6 +112,89 @@
           
           
             
+              <a class="post-title-link" href="/2015/05/27/网络层/">
+                计算机网络复习总结之网络层（一）
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/05/27/网络层/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/27/网络层/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><em>最近也准备临近考试月了，抽时间精简总结一下《计算机网络》。这是一篇关于计算机网络的第三层，网络层相关的知识。</em></p>
+<p>在计算机网络的分层中，网络层的作用就是将<code>分组</code>从源主机沿网络路径发到目的主机上，所以网络层里最核心的功能就是：<strong>分组转发</strong> 和 <strong>路由选择</strong>。</p>
+<h1 id="分组转发和路由选择">分组转发和路由选择</h1><hr>
+<p>既然我们知道了网络层里最核心的两个功能，那我们有必要逐个了解它们分别是干什么的。</p>
+<ul>
+<li><p><strong>分组转发</strong>。当一个分组到达路由器输入链路时，需要将该分组转发到相应合适的输出链路上。每一个分组都会带有一个首部，而首部里有转发的标识。路由器根据转发标识，查询路由器内的<code>转发表</code>(forwarding table)，转发表会为分组指出该通往的输出链路。</p>
+</li>
+<li><p><strong>路由选择</strong>。当分组开始从源主机发往目的主机，网络层必须决定分组该采用的路由或路径。而路由选择，就是用来提供分组转发时所需要的转发表。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/05/27/网络层/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络/"> #计算机网络 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/05/12/异步编程之co——源码分析/">
                 异步编程之co——源码分析
               </a>
@@ -973,88 +1056,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/02/binarySearch二分查找——Javascript实现/">
-                binarySearch二分查找——Javascript实现
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-02
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/02/binarySearch二分查找——Javascript实现/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/02/binarySearch二分查找——Javascript实现/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在很早之前，我就写过了一篇也关于二分法的相关博文：<a href="http://www.cnblogs.com/YikaJ/p/4129569.html">JavaScript快排与原生sort的测试</a>。当时是用二分法进行快速排序，其实和这次思路大致相当。二分查找最重要的一个条件，就是需要将数组先按照从小到大的顺序进行排序后，方可进行查找。</p>
-<p>一起来想想大致的思路：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1. </span>binarySearch函数需要接收的参数是：一个预先排序好的数组，一个需要查找的目标值，左边界和右边界。</span><br><span class="line"><span class="bullet">2. </span>让数组的中值和目标值比较，若相等，则返回中值所在的序号，函数结束。若不相等，进行第三步</span><br><span class="line"><span class="bullet">3. </span>不相等，则进行大小比较，若目标比中值小，则范围缩小到左边界到中值，并重新返回第一步。反之，范围缩小到中值到右边界，返回第一步。</span><br><span class="line"><span class="bullet">4. </span>找不到则是，中值序号等于左边界或右边界，返回-1。</span><br></pre></td></tr></table></figure>
-<p>这个伪代码，写的还是有点凌乱的。最主要的思想还是在于递归。一起实现上述的代码吧。我用的是coffeeScript实现的，除了某些地方我会指出来，大致都能看懂的。若对coffeeScript感兴趣的同学，可以移步：<a href="http://coffee-script.org">CoffeeScript中文</a>。还是要强调一下，coffee的块级判断是靠缩进层次的。所以使用时，千万不要空格和Tab缩进混用。</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">binarySearch = (dataArr, target, <span class="built_in">start</span> = <span class="number">0</span>, <span class="function"><span class="keyword">end</span> = <span class="title">dataArr</span>.<span class="title">length-1</span>)-&gt;</span></span><br><span class="line">  <span class="comment"># 若不传参，参数默认: start = 0, end = dataArr.length - 1</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">middle</span> = parseInt((<span class="built_in">start</span> + <span class="function"><span class="keyword">end</span>) / <span class="title">2</span>) # 取中间序号</span></span><br><span class="line">  <span class="constant">return</span> -<span class="number">1</span> <span class="keyword">if</span> <span class="keyword">middle</span> == <span class="built_in">start</span> <span class="operator">or</span> <span class="keyword">middle</span> == <span class="function"><span class="keyword">end</span> # 查询失败</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(dataArr[<span class="keyword">middle</span>] == target)</span><br><span class="line">    <span class="constant">return</span> <span class="keyword">middle</span>  <span class="comment"># 查询成功</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target &lt; dataArr[<span class="keyword">middle</span>])</span><br><span class="line">    <span class="constant">return</span> binarySearch(dataArr, target, <span class="number">0</span>, <span class="keyword">middle</span>-<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="constant">return</span> binarySearch(dataArr, target, <span class="keyword">middle</span>+<span class="number">1</span>, <span class="function"><span class="keyword">end</span>)</span></span><br></pre></td></tr></table></figure>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/02/binarySearch二分查找——Javascript实现/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/算法/"> #算法 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1090,7 +1091,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
