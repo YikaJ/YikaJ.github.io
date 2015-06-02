@@ -18,7 +18,7 @@
 
 
 
-  <meta name="keywords" content="Generator,co,javascript,异步编程," />
+  <meta name="keywords" content="计算机网络," />
 
 
 
@@ -39,7 +39,7 @@
   </script>
 
 
-  <title> 异步编程之Generator(1)——领略魅力 // Yika J's Blog </title>
+  <title> 计算机网络复习总结之网络层（二） // Yika J's Blog </title>
 </head>
 
 <body>
@@ -110,7 +110,7 @@
           
           
             
-              异步编程之Generator(1)——领略魅力
+              计算机网络复习总结之网络层（二）
             
           
         </h1>
@@ -118,7 +118,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-05
+          发表于 2015-06-02
         </span>
 
         
@@ -127,8 +127,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/05/06/异步编程之Generator（1）——领略魅力/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/06/异步编程之Generator（1）——领略魅力/"></span>
+            <a href="/2015/06/02/计算机网络复习总结之网络层（二）/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/02/计算机网络复习总结之网络层（二）/"></span>
             </a>
           </span>
           
@@ -142,57 +142,51 @@
       
 
       
-        <p>异步编程系列教程：</p>
+        <h1 id="IP地址及编码方式">IP地址及编码方式</h1><hr>
+<p>我们一开始必须要了解清楚，IP地址就是给因特网的每一个主机（或路由器）的每一个接口分配一个在全世界范围内唯一的32位标识符。有了这个唯一的标识符，我们才可能在因特网上进行方便的寻址。我们一般都是将32位的IP地址中的每8位，用等效的十位数进行替换，方便我们阅读。举个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">32位：10000000 00001011 00000011 00011111</span><br><span class="line">8位：128 11 3 31</span><br><span class="line">我们一般用点分十进制表示：128.11.3.31</span><br></pre></td></tr></table></figure>
+<p>IP地址的编址方式经过了3个阶段：</p>
 <ol>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/" target="_blank" rel="external">(翻译)异步编程之Promise(1)——初见魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/" target="_blank" rel="external">异步编程之Promise(2)：探究原理</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/" target="_blank" rel="external">异步编程之Promise(3)：拓展进阶</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/" target="_blank" rel="external">异步编程之Generator(1)——领略魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/" target="_blank" rel="external">异步编程之Generator(2)——剖析特性</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_blank" rel="external">异步编程之co——源码分析</a></li>
+<li><strong><em>分类编址</em></strong>。这是最基本的编址方式。</li>
+<li><strong><em>划分子网</em></strong>。对分类编址的改进</li>
+<li><strong><em>无分类编址</em></strong>。这是目前正在使用的编址方式。</li>
 </ol>
-<h1 id="为何使用Generator">为何使用Generator</h1><hr>
-<p>回顾一下我们之前学习的promise。我们巧妙利用了<code>promise/deferred</code>模式，用链式结构代替了嵌套回调的结构，大大缓解了回调地狱。我们再来看看之前我们举的那个异步串行队列的例子吧！假设我们有一个<code>hello.txt</code>，里面存了一个JSON文件的文件名，我们需要得到JSON文件的message属性的值。步骤如下：</p>
-<ol>
-<li>读取<code>hello.txt</code>文件</li>
-<li>得到JSON文件名,再次读取文件</li>
-<li>得到JSON数据后，进行JSON解析</li>
-<li>获得JSON的message属性 </li>
-</ol>
-<h2 id="Promise链式调用">Promise链式调用</h2><p>这个例子我们之前也是举过非常多次的，我们尝试使用Promise链式结构完成：</p>
-<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里的readFile已经是promise化的异步API</span></span><br><span class="line">readFile(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(filename)</span>&#123;</span></span><br><span class="line">        <span class="keyword">return</span> readFile(filename, <span class="string">'utf-8'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="transposed_variable">JSON.</span>parse)</span><br><span class="line">    .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(data)</span>&#123;</span></span><br><span class="line">        <span class="transposed_variable">console.</span>log(<span class="transposed_variable">data.</span>message);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(err)</span>&#123;</span></span><br><span class="line">        <span class="transposed_variable">console.</span>error(<span class="transposed_variable">err.</span>message);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-<p>这样一看下来，promise好像并没有多大问题，思维是线性的，而且错误处理也很友好。我们只需要把上一层执行后的结果通过<code>then()</code>传到下一步执行即可。嗯，但不得不说被链式结构束缚后，我们并没有得到一种酣畅淋漓的编程体验。</p>
-<h2 id="同步API">同步API</h2><p>我们要写的爽，当然是要将异步编程得到同步编程的体验，这样我们直接使用同步API看一下是怎样的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> filename = fs.readFileSync(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>);</span><br><span class="line"><span class="keyword">var</span> json = fs.readFileSync(filename, <span class="string">'utf-8'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.parse(json).message);</span><br></pre></td></tr></table></figure>
-<p>同步的写法清晰明了，而且更符合我们以往的编程习惯。但是同步API阻塞代码这个弊病会在Javascript的单线程执行中非常明显。我们到底有没有一种既可以非常接近同步编程的写法，又可以异步不阻塞代码执行呢？既然问出这种问题，答案当然是有的，就是今天的主角：<strong><em>Generator</em></strong>。</p>
-<a id="more"></a>
-<h2 id="Generator使用co写法">Generator使用co写法</h2><p>Generator，顾名思义是一个构造器，它本身是用来生成迭代器的。它是ES6的新东西，所以你为了使用它，需要在node中开启harmony模式才能体验到它。</p>
-<p><code>$ node --harmony</code></p>
-<p>基于Generator，TJ大神做了一个<code>co</code>库。<code>co</code>在最新的版本里，结合Generator和Promise改善了异步编程的体验，也就是我们之前说的：<strong><em>既可以同步，又不会阻塞</em></strong>。</p>
-<p>还是一样的例子，我们结合promise的代码和同步API的代码对比看看：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">co(<span class="function"><span class="keyword">function</span>* <span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> filename = <span class="keyword">yield</span> readFile(<span class="string">'hello.txt'</span>, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">var</span> json = <span class="keyword">yield</span> readFile(filename, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(json).message;</span><br><span class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error);</span><br></pre></td></tr></table></figure>
-<p>非常像有没有，我们不再需要将每一次异步的结果都放在<code>then()</code>中进行处理，我们可以通过类似于同步的写法调用Promise异步API，大大提升编程体验。最后<code>co()</code>返回了一个promise对象，提供我们做最后的数据处理和错误处理。我们从同步API转到<code>co</code>，仅仅需要做到以下几点：</p>
+<p>接下来我们一一看看这三种编址方式：</p>
+<h2 id="分类编址">分类编址</h2><p>分类编址的地址，是由两个固定长度的字段组成。一个字段是<code>网络号（net-id）</code>，它是标志主机所连网络。另一个字段是<code>主机号（host-id）</code>，它标志的是该主机，并且主机号必须在网络号的网络范围内是唯一的。这样子，一个IP地址在整个因特网范围内便是唯一的。</p>
+<p><code>分类编址：IP地址定义为：{&lt;网络号&gt;, &lt;主机号&gt;}</code></p>
+<p>这样子的编址方式有以下几种好处：</p>
 <ul>
-<li>co里面传的函数标识符需要加上<em>号，`function</em>`。这也就是Generator函数</li>
-<li>调用promise异步API之前，都要加上<code>yield</code>标识符</li>
-<li>将需要做最后处理的数据<code>return</code>出来，在<code>then()</code>中进行处理即可</li>
+<li>分配IP地址的机构仅仅需要分配网络号即可，主机号自行分配。</li>
+<li>路由器仅仅根据主机的网络号进行分组转发，这样子路由表里的内容会大大减少，提升了路由寻址的效率。</li>
 </ul>
-<h1 id="预习Generator">预习Generator</h1><hr>
-<p>我们在举完异步串行的例子后，这次的文章就接近尾声了。最后我们可以大致了解一下<code>co</code>到底是如何运作的呢？我们会在接下来的文章进行深究，这一次就简单说一说，你当作预习就可以了：</p>
-<h2 id="Generator相关">Generator相关</h2><ol>
-<li>Generator生成迭代器后，等待迭代器的<code>next()</code>指令启动。</li>
-<li>启动迭代器后，代码会运行到yield处停止。并返回一个<code>{value: AnyType, done: Boolean}</code>对象，<code>value</code>是这次执行的结果，<code>done</code>是迭代是否结束。并等待下一次的<code>next()</code>指令。</li>
-<li><code>next()</code>再次启动后。若<code>done</code>属性不为true，则可以继续从上一次停止的地方继续迭代。</li>
-<li>一直重复2，3步骤，直到<code>done</code>为true。</li>
-</ol>
-<h2 id="co相关">co相关</h2><ol>
-<li>co内部的迭代器对象是被封装成Promise的。</li>
-<li><code>yield</code>后面跟的必须是一个promise化的异步API，所以<code>next()</code>得到的结果是一个promise对象。</li>
-<li>若迭代没有结束，则<code>co</code>会自动为该异步promise对象的<code>resolve</code>中，增添一个<code>next()</code>。通过前面的异步执行完回调后，再调用<code>next()</code>，使迭代器的代码不断向前执行。</li>
-<li>若迭代结束，则直接调用整个迭代器对象的<code>resolve</code>。</li>
-</ol>
-<h2 id="总结">总结</h2><p>或许现在大家看的是一知半解，或许很兴奋想知道更多相关的。若仅仅是想学会用co，我想上面的大概已经足够你看了。但是想更深入，你必须先弄懂promise的原理和Generator的相关特性。最后使用<code>co</code>库一定会得心应手。</p>
-<p>接下来，我会先讲一些关于Generator的相关特性，再配合之前说过的promise，深入到<code>co</code>的源码学习中。</p>
+<p>但是有一个问题就是，32位的IP地址，我们需要多少位的网络号和多少位的主机号呢？分类编址的方案，设计了几种方案，我们看看最常用的三种单播地址。</p>
+<ul>
+<li>A类地址：网络号占1个字节，且网络号第一位是0，相应主机号占3个字节。</li>
+<li>B类地址：网络号占2个字节，且网络号前两位是10，相应主机号占2个字节。</li>
+<li>C类地址：网络号占3个字节，且网络号前三位是110，相应主机号占1个字节。</li>
+<li>D、E这两种地址咱不讨论</li>
+</ul>
+<p>通过这样分类编址，当我们得到一个IP地址时，我们可以通过前几位就判断地址类别并计算出网络号和主机号。</p>
+<a id="more"></a>
+<h2 id="划分子网">划分子网</h2><p>分类编址看起来很美好，但是实际上它考虑并不周全。在实际应用中，中小型规模的网络开始爆发，这样导致了一个问题十分明显。1个C类地址空间占一个字节也就是能容纳256个主机，其中还有两个是用于特殊目的。对于一个组织来说，254台主机，真的太不够用了。所以只能申请B类地址，也就是占2个字节，65536台主机。这样的结果导致大量的IP地址被浪费，很快就会面临分配完的危险。</p>
+<p>为了解决这个问题，提出了分类子网的解决方案。也就是说，我们让几个中小规模的组织使用同一个A或B类地址的网络号，然后再通过<code>子网号（subnet-id）</code>来区分是否在同一条链路上。子网号是不定长的，对应的主机号就减少子网号所占的位数。</p>
+<p><code>划分子网：IP地址定义为：{&lt;网络号&gt;, &lt;子网号&gt;, &lt;主机号&gt;}</code></p>
+<p>划分子网的编址方式，通过将A、B类地址空间划分给多个组织使用，大大减少了对A、B类地址空间的浪费。</p>
+<h2 id="无分类编址">无分类编址</h2><p>划分子网在一度程度上，大大缓解了空间浪费问题。但是C类地址因为空间太小，得不到充分利用，也是非常大的浪费。后来IETF就提出了<code>无分类编址（CIDR）</code>方法来解决IP紧张的问题。</p>
+<p>CIDR消除了传统的A、B、C类地址以及划分子网的概念。IP地址分成两个部分，前部分是不定长的<code>网络前缀（network-prefix）</code>，代替分类编址中的“网络号”来指明网络，后面仍旧是主机号，指明主机号。</p>
+<p><code>无分类编址：IP地址定义为：{&lt;网络前缀&gt;, &lt;主机号&gt;}</code></p>
+<p>是不是感觉又回到了分类编址的两级结构，不过它们非常重要的区别就是网络前缀是不定长的。这样一个IP地址并不能确定网络前缀和主机，所以需要配合一个32位的<code>地址掩码（address mask）</code>。地址掩码是由一串1和跟着后面的0组成的，而且1的长度就是网络前缀的长度。还可以通过<code>斜线记法（slash notation）</code>，来表示网络前缀1的长度，例如<code>/20</code>代表地址掩码有20个1。</p>
+<ul>
+<li>A类地址的默认地址掩码是<code>255.0.0.0</code></li>
+<li>B类地址的默认地址掩码是<code>255.255.0.0</code></li>
+<li>C类地址的默认地址掩码是<code>255.255.255.0</code>。</li>
+</ul>
+<h3 id="IP地址与地址掩码的计算">IP地址与地址掩码的计算</h3><p>接下来，就是看一下IP地址如何配合地址掩码来实现唯一的标识。只要把地址掩码和IP地址进行逐位的“与”运算，就可以得到它的网络地址（主机号全为0）。我们直接举个例子看看通过IP地址如何得到网络地址的。</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">已知：</span><br><span class="line">	<span class="literal">IP</span>地址：<span class="number">141.14</span><span class="string">.72</span><span class="string">.24</span>（<span class="number">141.14</span><span class="string">.01001000</span><span class="string">.24</span>）</span><br><span class="line">	地址掩码：<span class="number">255.255</span><span class="string">.192</span><span class="string">.0</span>（<span class="number">255.255</span><span class="string">.11000000</span><span class="string">.0</span>）</span><br><span class="line">	或者用斜线记法：<span class="number">141.14</span><span class="string">.72</span><span class="string">.24</span>/<span class="number">18</span></span><br><span class="line">思路：</span><br><span class="line">	将<span class="literal">IP</span>地址与网络掩码都转化成二进制后进行“与”运算。</span><br><span class="line">	这里有个技巧就是，全为<span class="number">1</span>和全为<span class="number">0</span>都是不需要转化运算的。</span><br><span class="line">	所以在这个题目里，我们仅仅需要将第三个字节进行转化后运算，得到主机号为<span class="number">0</span>的网络号。</span><br><span class="line">计算得：</span><br><span class="line">	网络地址：<span class="number">141.14</span><span class="string">.64</span><span class="string">.0</span>（<span class="number">141.14</span><span class="string">.01000000</span><span class="string">.0</span>）</span><br></pre></td></tr></table></figure>
+<p>技巧提示在例子中也讲了，但这里要强调一点就是，同一个IP地址与不同的地址掩码是可以得到相同的网络号的。虽然网络号一样，但是不同的地址掩码所代表的主机空间也是不一样的。所以主机在进行网络配置的时候，<strong>不仅需要配置主机的IP地址，还需要配置所在网络的地址掩码</strong>。</p>
+<h3 id="CIDR地址块">CIDR地址块</h3><p>网络前缀不仅仅只是用来表示某个网络的网络地址，它还可以表示连续的IP地址块，所以它不再沿用“网络号”这个说法。CIDR把<em>网络前缀都相同</em>的连续IP地址组成“CIDR地址块”。我们只要知道了CIDR地址块的任意一个地址，就可以知道地址块的最小和最大地址，以及地址数。举个例子：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">已知：</span><br><span class="line">	<span class="literal">IP</span>地址：<span class="number">128.14</span><span class="string">.35</span><span class="string">.7</span>/<span class="number">20</span></span><br><span class="line">思路：</span><br><span class="line">	我们从这里可以得到前<span class="number">20</span>位是网络前缀，所以后<span class="number">12</span>位便是主机号。</span><br><span class="line">	所以我们让主机号都为<span class="number">0</span>，则是最小地址。</span><br><span class="line">	主机号都为<span class="number">1</span>，就是最大地址。</span><br><span class="line">	而地址数就是<span class="number">2</span>的<span class="number">12</span>次方。</span><br><span class="line">计算：</span><br><span class="line">	最小地址：<span class="number">128.13</span><span class="string">.32</span><span class="string">.0</span></span><br><span class="line">	最大地址：<span class="number">128.13</span><span class="string">.47</span><span class="string">.255</span></span><br><span class="line">	地址数：<span class="number">4096</span>个</span><br></pre></td></tr></table></figure>
+<p>我们使用CIDR可以更有效的分配IPv4的地址空间，可以根据需求分配适当大小的CIDR地址块，拥有之前几种方法所不具备的灵活性。</p>
 
       
     </div>
@@ -201,13 +195,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Generator/"> #Generator </a>
-          
-            <a href="/tags/co/"> #co </a>
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/异步编程/"> #异步编程 </a>
+            <a href="/tags/计算机网络/"> #计算机网络 </a>
           
         </div>
       
@@ -216,13 +204,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/05/08/异步编程之Generator（2）——剖析特性/">异步编程之Generator(2)——剖析特性</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/05/02/异步编程之Promise（3）：拓展进阶/">异步编程之Promise(3)：拓展进阶</a>
+              <a href="/2015/05/27/计算机网络复习总结之网络层（一）/">计算机网络复习总结之网络层（一）</a>
             
           </div>
         </div>
@@ -341,7 +327,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为何使用Generator"><span class="nav-number">1.</span> <span class="nav-text">为何使用Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise链式调用"><span class="nav-number">1.1.</span> <span class="nav-text">Promise链式调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步API"><span class="nav-number">1.2.</span> <span class="nav-text">同步API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator使用co写法"><span class="nav-number">1.3.</span> <span class="nav-text">Generator使用co写法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预习Generator"><span class="nav-number">2.</span> <span class="nav-text">预习Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator相关"><span class="nav-number">2.1.</span> <span class="nav-text">Generator相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co相关"><span class="nav-number">2.2.</span> <span class="nav-text">co相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IP地址及编码方式"><span class="nav-number">1.</span> <span class="nav-text">IP地址及编码方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分类编址"><span class="nav-number">1.1.</span> <span class="nav-text">分类编址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#划分子网"><span class="nav-number">1.2.</span> <span class="nav-text">划分子网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无分类编址"><span class="nav-number">1.3.</span> <span class="nav-text">无分类编址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP地址与地址掩码的计算"><span class="nav-number">1.3.1.</span> <span class="nav-text">IP地址与地址掩码的计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CIDR地址块"><span class="nav-number">1.3.2.</span> <span class="nav-text">CIDR地址块</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -911,8 +897,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'YikaJ';
-      var disqus_identifier = '2015/05/06/异步编程之Generator（1）——领略魅力/';
-      var disqus_url = 'http://yoursite.com/2015/05/06/异步编程之Generator（1）——领略魅力/';
+      var disqus_identifier = '2015/06/02/计算机网络复习总结之网络层（二）/';
+      var disqus_url = 'http://yoursite.com/2015/06/02/计算机网络复习总结之网络层（二）/';
 
       (function(){
         var dsq = document.createElement('script');

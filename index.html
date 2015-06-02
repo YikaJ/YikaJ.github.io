@@ -112,7 +112,107 @@
           
           
             
-              <a class="post-title-link" href="/2015/05/27/网络层/">
+              <a class="post-title-link" href="/2015/06/02/计算机网络复习总结之网络层（二）/">
+                计算机网络复习总结之网络层（二）
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-02
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/02/计算机网络复习总结之网络层（二）/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/02/计算机网络复习总结之网络层（二）/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h1 id="IP地址及编码方式">IP地址及编码方式</h1><hr>
+<p>我们一开始必须要了解清楚，IP地址就是给因特网的每一个主机（或路由器）的每一个接口分配一个在全世界范围内唯一的32位标识符。有了这个唯一的标识符，我们才可能在因特网上进行方便的寻址。我们一般都是将32位的IP地址中的每8位，用等效的十位数进行替换，方便我们阅读。举个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">32位：10000000 00001011 00000011 00011111</span><br><span class="line">8位：128 11 3 31</span><br><span class="line">我们一般用点分十进制表示：128.11.3.31</span><br></pre></td></tr></table></figure>
+<p>IP地址的编址方式经过了3个阶段：</p>
+<ol>
+<li><strong><em>分类编址</em></strong>。这是最基本的编址方式。</li>
+<li><strong><em>划分子网</em></strong>。对分类编址的改进</li>
+<li><strong><em>无分类编址</em></strong>。这是目前正在使用的编址方式。</li>
+</ol>
+<p>接下来我们一一看看这三种编址方式：</p>
+<h2 id="分类编址">分类编址</h2><p>分类编址的地址，是由两个固定长度的字段组成。一个字段是<code>网络号（net-id）</code>，它是标志主机所连网络。另一个字段是<code>主机号（host-id）</code>，它标志的是该主机，并且主机号必须在网络号的网络范围内是唯一的。这样子，一个IP地址在整个因特网范围内便是唯一的。</p>
+<p><code>分类编址：IP地址定义为：{&lt;网络号&gt;, &lt;主机号&gt;}</code></p>
+<p>这样子的编址方式有以下几种好处：</p>
+<ul>
+<li>分配IP地址的机构仅仅需要分配网络号即可，主机号自行分配。</li>
+<li>路由器仅仅根据主机的网络号进行分组转发，这样子路由表里的内容会大大减少，提升了路由寻址的效率。</li>
+</ul>
+<p>但是有一个问题就是，32位的IP地址，我们需要多少位的网络号和多少位的主机号呢？分类编址的方案，设计了几种方案，我们看看最常用的三种单播地址。</p>
+<ul>
+<li>A类地址：网络号占1个字节，且网络号第一位是0，相应主机号占3个字节。</li>
+<li>B类地址：网络号占2个字节，且网络号前两位是10，相应主机号占2个字节。</li>
+<li>C类地址：网络号占3个字节，且网络号前三位是110，相应主机号占1个字节。</li>
+<li>D、E这两种地址咱不讨论</li>
+</ul>
+<p>通过这样分类编址，当我们得到一个IP地址时，我们可以通过前几位就判断地址类别并计算出网络号和主机号。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/06/02/计算机网络复习总结之网络层（二）/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络/"> #计算机网络 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/05/27/计算机网络复习总结之网络层（一）/">
                 计算机网络复习总结之网络层（一）
               </a>
             
@@ -131,8 +231,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/05/27/网络层/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/27/网络层/"></span>
+            <a href="/2015/05/27/计算机网络复习总结之网络层（一）/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/27/计算机网络复习总结之网络层（一）/"></span>
             </a>
           </span>
           
@@ -156,7 +256,7 @@
 </li>
 <li><p><strong>路由选择</strong>。当分组开始从源主机发往目的主机，网络层必须决定分组该采用的路由或路径。而路由选择，就是用来提供分组转发时所需要的转发表。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/05/27/网络层/">
+            <a class="btn" href="/2015/05/27/计算机网络复习总结之网络层（一）/">
               阅读全文 &raquo;
             </a>
           </div>
@@ -971,91 +1071,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/06/Javascript函数柯里化/">
-                Javascript函数柯里化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-06
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/06/Javascript函数柯里化/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/06/Javascript函数柯里化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>函数柯里化currying，是函数式编程非常重要的一个标志。它的实现需要满足以下条件，首先就是函数可以作为参数进行传递，然后就是函数可以作为返回值return出去。我们依靠这个特性编写很多优雅酷炫的代码。那我们来看一下最简单的实现。</p>
-<p>大家一般都是举addSum的例子，我当然也不例外。</p>
-<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">add</span> = <span class="params">(num1)</span>-&gt;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">(num2)</span>-&gt;</span></span><br><span class="line">    <span class="keyword">return</span> num1 + num2;</span><br><span class="line">    </span><br><span class="line">add3 = add(<span class="number">3</span>);</span><br><span class="line">add5 = add(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">add3(<span class="number">5</span>) <span class="comment"># 返回8</span></span><br><span class="line">add5(<span class="number">5</span>) <span class="comment"># 返回10</span></span><br></pre></td></tr></table></figure>
-<p>上述例子其实已经对柯里化的实现，有一个非常好的了解了。其实也就是“分步求值”，我们可以把第一个参数通过闭包保存起来，以供return出去的匿名函数使用。所以我们可以根据add来自定义各种各样的新函数。</p>
-<hr>
-<p>我们要使某个函数可以柯里化，难道一定要在函数创建时，就具有柯里化的特性么？假设我们的add函数，起初并不具有柯里化特性的，我们需要怎么做才能让它柯里化呢？</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/06/Javascript函数柯里化/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/curry/"> #curry </a>
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/函数式编程/"> #函数式编程 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1091,7 +1106,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

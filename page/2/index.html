@@ -112,6 +112,91 @@
           
           
             
+              <a class="post-title-link" href="/2015/04/06/Javascript函数柯里化/">
+                Javascript函数柯里化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-06
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/06/Javascript函数柯里化/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/06/Javascript函数柯里化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>函数柯里化currying，是函数式编程非常重要的一个标志。它的实现需要满足以下条件，首先就是函数可以作为参数进行传递，然后就是函数可以作为返回值return出去。我们依靠这个特性编写很多优雅酷炫的代码。那我们来看一下最简单的实现。</p>
+<p>大家一般都是举addSum的例子，我当然也不例外。</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">add</span> = <span class="params">(num1)</span>-&gt;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">(num2)</span>-&gt;</span></span><br><span class="line">    <span class="keyword">return</span> num1 + num2;</span><br><span class="line">    </span><br><span class="line">add3 = add(<span class="number">3</span>);</span><br><span class="line">add5 = add(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">add3(<span class="number">5</span>) <span class="comment"># 返回8</span></span><br><span class="line">add5(<span class="number">5</span>) <span class="comment"># 返回10</span></span><br></pre></td></tr></table></figure>
+<p>上述例子其实已经对柯里化的实现，有一个非常好的了解了。其实也就是“分步求值”，我们可以把第一个参数通过闭包保存起来，以供return出去的匿名函数使用。所以我们可以根据add来自定义各种各样的新函数。</p>
+<hr>
+<p>我们要使某个函数可以柯里化，难道一定要在函数创建时，就具有柯里化的特性么？假设我们的add函数，起初并不具有柯里化特性的，我们需要怎么做才能让它柯里化呢？</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/06/Javascript函数柯里化/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/curry/"> #curry </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+            <a href="/tags/函数式编程/"> #函数式编程 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/04/02/binarySearch二分查找——Javascript实现/">
                 binarySearch二分查找——Javascript实现
               </a>
@@ -496,7 +581,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
