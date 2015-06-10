@@ -743,7 +743,8 @@ td {
   font-family: "PT Mono", Consolas, Monaco, Menlo, monospace;
 }
 .post code {
-  background: #eee;
+  background: #add8e6;
+  color: #000;
   text-shadow: 0 1px #fff;
   padding: 0 0.3em;
 }
@@ -1180,7 +1181,7 @@ input.menu-search-input {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #81bd44;
+  background: #467eff;
 }
 .sidebar-nav {
   margin: 0;
