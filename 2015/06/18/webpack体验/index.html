@@ -231,7 +231,8 @@
 <p>安装完插件就要配置<code>webpack.config.js</code>了。我们添加以下代码</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">"extract-text-webpack-plugin"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	<span class="comment">// ...省略各种代码</span></span><br><span class="line">	<span class="built_in">module</span>: &#123;</span><br><span class="line">        loaders: [</span><br><span class="line">            &#123;test: <span class="regexp">/\.js$/</span>, loader: <span class="string">"babel"</span>&#125;,</span><br><span class="line">            &#123;test: <span class="regexp">/\.css$/</span>, loader: ExtractTextPlugin.extract(<span class="string">"style-loader"</span>, <span class="string">"css-loader"</span>)&#125;,</span><br><span class="line">            &#123;test: <span class="regexp">/\.(jpg|png|svg)$/</span>, loader: <span class="string">"url?limit=8192"</span>&#125;,</span><br><span class="line">            &#123;test: <span class="regexp">/\.scss$/</span>, loader: <span class="string">"style!css!sass"</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(<span class="string">'common.js'</span>),</span><br><span class="line">        <span class="keyword">new</span> ExtractTextPlugin(<span class="string">"[name].css"</span>)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>为了区分开用<code>&lt;link&gt;</code>链接和用<code>&lt;style&gt;</code>，我们这里以CSS后缀结尾的模块用插件。我们重点关注一下使用了ExtractTextPlugin的模块，在ExtractTextPlugin的extract方法有两个参数，第一个参数是经过编译后通过style-loader单独提取出文件来，而第二个参数就是用来编译代码的loader。</p>
-<p>当然，插件也支持所有独立样式打包成一个css文件。增加多一个参数即可。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ExtractTextPlugin(<span class="string">"style.css"</span>, &#123;allChunks: <span class="literal">true</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>当然，插件也支持所有独立样式打包成一个css文件。增加多一个参数即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ExtractTextPlugin(<span class="string">"style.css"</span>, &#123;allChunks: <span class="literal">true</span>&#125;)</span><br></pre></td></tr></table></figure>
 <p>至于怎样加载样式是最佳实践，这个就要自己平时多思考了。多站点多样式的时候，是做到一次性打包加载呢，还是按需加载呢？我这里就建议一项，主页尽量做到最精简，毕竟决定用户存留时间。</p>
 <h1 id="总结">总结</h1><hr>
 <p>前端社区不断发展，越来越趋向于组件化的发展。通过webpack，我们就能体验到<code>one component one module</code>的开发感觉。当然如何更好的使用webpack还是要通过不断的思考总结，才能找到最优的方案。</p>
@@ -253,6 +254,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/18/React-Todos/">React-Todos</a>
             
           </div>
 
@@ -322,7 +325,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -336,7 +339,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

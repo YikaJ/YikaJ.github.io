@@ -1,0 +1,606 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+
+
+  <meta name="keywords" content="javascript,react," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?243430500f1636a80d2478898c748ad1";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <title> React-Todos // Yika J's Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Yika J's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              React-Todos
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-18
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/18/React-Todos/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/18/React-Todos/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>最近学完React的最基本概念，闲下来的时候就自己写了一个Todo-List的小应用。这里做个简略的说明，给想好好学React的新手看。</p>
+<h1 id="开始之前">开始之前</h1><hr>
+<h2 id="学习前提">学习前提</h2><p>这里我用了webpackb做了babel和JSX预处理和模块打包。所以对React和一些ES2015（ES6）的语法要有一定的了解。我相信学习ES2015绝对是划算的，因为它是Js的规范。这里给出学习的地方，阮一峰老师的<a href="http://es6.ruanyifeng.com" target="_blank" rel="external">ECMAScript 6 入门</a>或者babel的相关文档<a href="https://babeljs.io/docs/learn-es2015" target="_blank" rel="external">Learn ES2015</a>。</p>
+<h2 id="功能需求">功能需求</h2><p>最后的实际效果：</p>
+<p><img src="http://i1.tietuku.com/a7a55341cff8d3d0.png" alt="效果图"></p>
+<p>我们需要做到的功能有：</p>
+<ul>
+<li>可以在最上面的input里，使用回车来添加任务。</li>
+<li>在中间的任务列表里，由checkbox来控制任务的状态。</li>
+<li>已完成的任务有一个<code>line-through</code>的样式。</li>
+<li>当鼠标移到每一个任务时，都会出现删除按钮提供删除。</li>
+<li>在底部有一个全选按钮，用于控制所有的任务状态。</li>
+<li>还有已完成与总数的显示。</li>
+<li>可以清空已完成的任务。</li>
+</ul>
+<h2 id="项目下载">项目下载</h2><p>上面就是一个Todo-List最基本的功能，而我们这次就是用React实现上述功能。例子在我的github上可以download下来，可以用作参考：<a href="https://github.com/YikaJ/react-todos" target="_blank" rel="external">React-Todos</a></p>
+<a id="more"></a>
+<h1 id="正式开始">正式开始</h1><hr>
+<h2 id="加载npm模块">加载npm模块</h2><p>重要要开始我们的React-Todo的项目了，首先我们就要新建项目，通过npm我们可以很轻松的创建项目，并加载我们所需要的各个组件。大家可以在自己的项目里，用我的<code>package.json</code>去加载所需要的模块。通过命令行进行安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<p>这里提一下，因为我们这里仅仅是前端静态的，并不涉及到数据库。所以我自己写了一个非常简单的用于操作localStorage的小模块<code>localDb</code>。所以涉及到数据存储的时候，都是用localStorage来代替数据库。它的原理就是，通过将数据格式化成JSON字符串进行存储，使用的时候就解析JSON字符串。这个模块在我的github的例子里有，需要从那里复制一份来，放在node_modules的文件夹内。</p>
+<h2 id="配置webpack">配置webpack</h2><p>经过一轮漫长的等待，我们终于安装好所需要的各个模块了。我们最开始我们的react的编码前，需要对webpack进行配置。关于webpack的学习，我这里就不赘述了，在前一篇刚讲完。下面直接看一看<code>webpack.config.js</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: <span class="string">"./src/entry.js"</span>,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'out'</span>),</span><br><span class="line">        publicPath: <span class="string">'./out/'</span>,</span><br><span class="line">        filename: <span class="string">"bundle.js"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    externals: &#123;</span><br><span class="line">        <span class="string">'react'</span>: <span class="string">'React'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        loaders: [</span><br><span class="line">            &#123; test: <span class="regexp">/\.js$/</span>, loader: <span class="string">"jsx!babel"</span>, include: <span class="regexp">/src/</span>&#125;,</span><br><span class="line">            &#123; test: <span class="regexp">/\.css$/</span>, loader: <span class="string">"style!css"</span>&#125;,</span><br><span class="line">            &#123; test: <span class="regexp">/\.scss$/</span>, loader: <span class="string">"style!css!sass"</span>&#125;,</span><br><span class="line">            &#123; test: <span class="regexp">/\.(jpg|png)$/</span>, loader: <span class="string">"url?limit=8192"</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里一切从简，可以看到入口文件是在src文件夹里的<code>entry.js</code>，然后输出文件放在out文件夹的<code>bundle.js</code>里。</p>
+<p>配置一下模块的loaders，先用babel-loader再用jsx-loader。这样子我们就可以让ES6配合JSX编写我们的React组件了。其它的加载器也没什么好说的了，如果不清楚可以翻我上一篇关于webpack的文章。</p>
+<p>这里提一下externals属性，这个属性是告诉webpack当遇到<code>require(&#39;react&#39;)</code>的时候，不去处理并且默认为全局的React变量。这样子，我们就需要在<code>index.html</code>单独用src去加载js。</p>
+<h2 id="分析各个组件">分析各个组件</h2><h3 id="App组件">App组件</h3><p>我这里并不会教大家手把手将这个React-Todo做出来，但是可以结合例子进行分析理解。先来看看总的组件，也就是App。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> LocalDb <span class="keyword">from</span> <span class="string">"localDb"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> TodoHeader <span class="keyword">from</span> <span class="string">"./TodoHeader.js"</span>;</span><br><span class="line"><span class="keyword">import</span> TodoMain <span class="keyword">from</span> <span class="string">"./TodoMain.js"</span>;</span><br><span class="line"><span class="keyword">import</span> TodoFooter <span class="keyword">from</span> <span class="string">"./TodoFooter.js"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    constructor()&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">this</span>.db = <span class="keyword">new</span> LocalDb(<span class="string">'React-Todos'</span>);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            todos: <span class="keyword">this</span>.db.get(<span class="string">"todos"</span>) || [],</span><br><span class="line">            isAllChecked: <span class="literal">false</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断是否所有任务的状态都完成，同步底部的全选框</span></span><br><span class="line">    allChecked()&#123;</span><br><span class="line">        <span class="keyword">let</span> isAllChecked = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.state.todos.every((todo)=&gt; todo.isDone))&#123;</span><br><span class="line">            isAllChecked = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;todos: <span class="keyword">this</span>.state.todos, isAllChecked&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加任务，是传递给Header组件的方法</span></span><br><span class="line">    addTodo(todoItem)&#123;</span><br><span class="line">        <span class="keyword">this</span>.state.todos.push(todoItem);</span><br><span class="line">        <span class="keyword">this</span>.allChecked();</span><br><span class="line">        <span class="keyword">this</span>.db.set(<span class="string">'todos'</span>,<span class="keyword">this</span>.state.todos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 改变任务状态，传递给TodoItem和Footer组件的方法</span></span><br><span class="line">    changeTodoState(index, isDone, isChangeAll=<span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(isChangeAll)&#123;</span><br><span class="line">            <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">                todos: <span class="keyword">this</span>.state.todos.map((todo) =&gt; &#123;</span><br><span class="line">                    todo.isDone = isDone;</span><br><span class="line">                    <span class="keyword">return</span> todo;</span><br><span class="line">                &#125;),</span><br><span class="line">                isAllChecked: isDone</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.state.todos[index].isDone = isDone;</span><br><span class="line">            <span class="keyword">this</span>.allChecked();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.db.set(<span class="string">'todos'</span>, <span class="keyword">this</span>.state.todos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清除已完成的任务，传递给Footer组件的方法</span></span><br><span class="line">    clearDone()&#123;</span><br><span class="line">        <span class="keyword">let</span> todos = <span class="keyword">this</span>.state.todos.filter(todo =&gt; !todo.isDone);</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            todos: todos,</span><br><span class="line">            isAllChecked: <span class="literal">false</span></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">this</span>.db.set(<span class="string">'todos'</span>, todos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除当前的任务，传递给TodoItem的方法</span></span><br><span class="line">    deleteTodo(index)&#123;</span><br><span class="line">        <span class="keyword">this</span>.state.todos.splice(index, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;todos: <span class="keyword">this</span>.state.todos&#125;);</span><br><span class="line">        <span class="keyword">this</span>.db.set(<span class="string">'todos'</span>, <span class="keyword">this</span>.state.todos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">var</span> props = &#123;</span><br><span class="line">            todoCount: <span class="keyword">this</span>.state.todos.length || <span class="number">0</span>,</span><br><span class="line">            todoDoneCount: (<span class="keyword">this</span>.state.todos &amp;&amp; <span class="keyword">this</span>.state.todos.filter((todo)=&gt;todo.isDone)).length || <span class="number">0</span></span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"panel"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">TodoHeader</span> <span class="attribute">addTodo</span>=<span class="value">&#123;this.addTodo.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">TodoMain</span> <span class="attribute">deleteTodo</span>=<span class="value">&#123;this.deleteTodo.bind(this)&#125;</span> <span class="attribute">todos</span>=<span class="value">&#123;this.state.todos&#125;</span> <span class="attribute">changeTodoState</span>=<span class="value">&#123;this.changeTodoState.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">TodoFooter</span> <span class="attribute">isAllChecked</span>=<span class="value">&#123;this.state.isAllChecked&#125;</span> <span class="attribute">clearDone</span>=<span class="value">&#123;this.clearDone.bind(this)&#125;</span> &#123;<span class="attribute">...props</span>&#125; <span class="attribute">changeTodoState</span>=<span class="value">&#123;this.changeTodoState.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">        )</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">React.render(<span class="xml"><span class="tag">&lt;<span class="title">App</span>/&gt;</span>, document.getElementById("app"));</span></span><br></pre></td></tr></table></figure>
+<p>用ES6写React最大的不同就是，组件可以通过继承React.Components来得到，并且初始化state也不需要冗长的getInitalialState，直接在构造函数里操作this.state即可。更优秀的便是<code>...</code>spread扩展操作符，可以让我们省下一堆不必要的代码，这个接下来再说。</p>
+<h4 id="App状态state">App状态state</h4><p>我们知道React的主流思想就是，所有的state状态和方法都是由父组件控制，然后通过props传递给子组件，形成一个单方向的数据链路，保持各组件的状态一致。所以我们在这个父组件App上，看的东西稍微有点多。一点点来看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">constructor()&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    <span class="keyword">this</span>.db = <span class="keyword">new</span> LocalDb(<span class="string">'React-Todos'</span>);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">        todos: <span class="keyword">this</span>.db.get(<span class="string">"todos"</span>) || [],</span><br><span class="line">        isAllChecked: <span class="literal">false</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在App组件的constructor内，我们先是初始化了我们的localStorage的数据库，放在了this.db上。然后便是初始化了state，分别有两个，一个是todos的列表，一个是所有的todos是否全选的状态。</p>
+<h4 id="App方法">App方法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断是否所有任务的状态都完成，同步底部的全选框</span></span><br><span class="line">allChecked()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加一个任务，参数是一个todoItem的object</span></span><br><span class="line">addTodo(todoItem)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变任务的状态，index是第几个，isDone是状态，isChangeAll是控制全部状态的</span></span><br><span class="line">changeTodoState(index, isDone, isChangeAll=<span class="literal">false</span>) <span class="comment">// 参数默认位false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 清空已完成</span></span><br><span class="line">clearDone()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除面板上第几个任务</span></span><br><span class="line">deleteTodo(index)</span><br><span class="line"></span><br><span class="line"><span class="comment">// react用于渲染的函数</span></span><br><span class="line">render()&#123;</span><br><span class="line">	<span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"panel"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">TodoHeader</span> /&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">TodoMain</span> /&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">TodoFooter</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>我们可以从render函数看到整个组件的结构，可以看到其实结构非常简单，就是上中下。上面的TodoHeader自然就是用来输入任务的地方，中间就是展示并操作todo-list的，而底部就是显示数据并提供特殊操作。这里还是要提醒一句，所有标签都必须闭合，即使是非结对的，也要用斜杠闭合上。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">       <span class="keyword">var</span> props = &#123;</span><br><span class="line">           todoCount: <span class="keyword">this</span>.state.todos.length || <span class="number">0</span>,</span><br><span class="line">           todoDoneCount: (<span class="keyword">this</span>.state.todos &amp;&amp; <span class="keyword">this</span>.state.todos.filter((todo)=&gt;todo.isDone)).length || <span class="number">0</span></span><br><span class="line">       &#125;;</span><br><span class="line">       <span class="keyword">return</span> (</span><br><span class="line">           <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"panel"</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="title">TodoHeader</span> <span class="attribute">addTodo</span>=<span class="value">&#123;this.addTodo.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="title">TodoMain</span> <span class="attribute">deleteTodo</span>=<span class="value">&#123;this.deleteTodo.bind(this)&#125;</span> <span class="attribute">todos</span>=<span class="value">&#123;this.state.todos&#125;</span> <span class="attribute">changeTodoState</span>=<span class="value">&#123;this.changeTodoState.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="title">TodoFooter</span> <span class="attribute">isAllChecked</span>=<span class="value">&#123;this.state.isAllChecked&#125;</span> <span class="attribute">clearDone</span>=<span class="value">&#123;this.clearDone.bind(this)&#125;</span> &#123;<span class="attribute">...props</span>&#125; <span class="attribute">changeTodoState</span>=<span class="value">&#123;this.changeTodoState.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">       )</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，其他的方法都是传到子组件上，就不一一详细说如何实现的了。总体的思想就是，方法在父组件定义，通过props传给需要的子组件进行调用传参，最后返回到父组件上执行函数，存储数据、改变state和重新render。方法需要<code>bind(this)</code>，不然方法内部的this指向会不正确。</p>
+<p>计算需要的数据后，通过props传递到子组件。如果细心的同学应该可以看到像这样的<code>{...props}</code>，这就是我之前说过的spread操作符。如果我们没有用这个操作符，就要这样写：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">TodoFooter</span> &#123;<span class="attribute">...props</span>&#125; /&gt;</span> // spread操作符</span><br><span class="line"><span class="tag">&lt;<span class="title">TodoFooter</span> <span class="attribute">todoCount</span>=<span class="value">&#123;props.todoCount&#125;</span> <span class="attribute">todoDoneCount</span>=<span class="value">&#123;props.todoDoneCount&#125;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>最佳的实践就是，当父组件传props给子组件，然后子组件要将props转发给孙子组件的时候，spread操作符简直让人愉悦！可以对一堆麻烦又丑又长的代码可以say goodbye了！</p>
+<p>最后我们将整个App渲染到DOM上即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">React.render(<span class="xml"><span class="tag">&lt;<span class="title">App</span>/&gt;</span>, document.getElementById("app"));</span></span><br></pre></td></tr></table></figure>
+<h3 id="AppHeader组件">AppHeader组件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoHeader</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定键盘回车事件，添加新任务</span></span><br><span class="line">    handlerKeyUp(event)&#123;</span><br><span class="line">        <span class="keyword">if</span>(event.keyCode === <span class="number">13</span>)&#123;</span><br><span class="line">            <span class="keyword">let</span> value = event.target.value;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(!value) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">let</span> newTodoItem = &#123;</span><br><span class="line">                text: value,</span><br><span class="line">                isDone: <span class="literal">false</span></span><br><span class="line">            &#125;;</span><br><span class="line">            event.target.value = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">this</span>.props.addTodo(newTodoItem);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"panel-header"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">onKeyUp</span>=<span class="value">&#123;this.handlerKeyUp.bind(this)&#125;</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">placeholder</span>=<span class="value">"what's your task ?"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">        )</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> TodoHeader;</span><br></pre></td></tr></table></figure>
+<p>到了子组件，方法就没那么多了，一般子组件就是绑定事件。可以看到在子组件绑定了keyUp事件，用来确定回车键并调用父组件传来的<code>addTodo()</code>，将新生成的todo任务作为参数传入。</p>
+<h3 id="AppFooter组件">AppFooter组件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">TodoFooter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理全选与全不选的状态</span></span><br><span class="line">    handlerAllState(event)&#123;</span><br><span class="line">        <span class="keyword">this</span>.props.changeTodoState(<span class="literal">null</span>, event.target.checked, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定点击事件，清除已完成</span></span><br><span class="line">    handlerClick()&#123;</span><br><span class="line">        <span class="keyword">this</span>.props.clearDone();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"clearfix todo-footer"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">checked</span>=<span class="value">&#123;this.props.isAllChecked&#125;</span> <span class="attribute">onChange</span>=<span class="value">&#123;this.handlerAllState.bind(this)&#125;</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">className</span>=<span class="value">"fl"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">span</span> <span class="attribute">className</span>=<span class="value">"fl"</span>&gt;</span>&#123;this.props.todoDoneCount&#125;已完成 / &#123;this.props.todoCount&#125;总数<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">button</span> <span class="attribute">onClick</span>=<span class="value">&#123;this.handlerClick.bind(this)&#125;</span> <span class="attribute">className</span>=<span class="value">"fr"</span>&gt;</span>清除已完成<span class="tag">&lt;/<span class="title">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">        )</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们先来看看这个footer上有哪些方法。第一个就是处理todo状态的，它通过底部的checkbox的change事件触发。然后就是清空已完成的按钮的点击事件的方法<code>handlerClick()</code>。然后下面的数据显示，就通过props的值进行显示。</p>
+<h3 id="TodoMain">TodoMain</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> TodoItem <span class="keyword">from</span> <span class="string">"./TodoItem.js"</span></span><br><span class="line"></span><br><span class="line">export default class TodoMain extends React.Component&#123;</span><br><span class="line">    // 遍历显示任务，转发props</span><br><span class="line">    render()&#123;</span><br><span class="line">        return (</span><br><span class="line">            &lt;ul className=<span class="string">"todo-list"</span>&gt;</span><br><span class="line">                &#123;this.props.todos.map((todo, index) =&gt; &#123;</span><br><span class="line">                    return &lt;TodoItem key=&#123;index&#125; &#123;...todo&#125; index=&#123;index&#125; &#123;...this.props&#125;/&gt;</span><br><span class="line">                &#125;)&#125;</span><br><span class="line">            &lt;/ul&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Main组件的作用就是，将props传过来的todos遍历显示出来。所以对每一个todo的细致操作都是放在TodoItem上。</p>
+<h3 id="TodoItem">TodoItem</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">TodoItem</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理任务是否完成状态</span></span><br><span class="line">    handlerChange()&#123;</span><br><span class="line">        <span class="keyword">let</span> isDone = !<span class="keyword">this</span>.props.isDone;</span><br><span class="line">        <span class="keyword">this</span>.props.changeTodoState(<span class="keyword">this</span>.props.index, isDone);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 鼠标移入</span></span><br><span class="line">    handlerMouseOver()&#123;</span><br><span class="line">        React.findDOMNode(<span class="keyword">this</span>.refs.deleteBtn).style.display = <span class="string">"inline"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 鼠标移出</span></span><br><span class="line">    handlerMouseOut()&#123;</span><br><span class="line">        React.findDOMNode(<span class="keyword">this</span>.refs.deleteBtn).style.display = <span class="string">"none"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除当前任务</span></span><br><span class="line">    handlerDelete()&#123;</span><br><span class="line">        <span class="keyword">this</span>.props.deleteTodo(<span class="keyword">this</span>.props.index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">let</span> doneStyle = <span class="keyword">this</span>.props.isDone ? &#123;textDecoration: <span class="string">'line-through'</span>&#125; : &#123;textDecoration: <span class="string">'none'</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="title">li</span></span><br><span class="line">                <span class="attribute">onMouseOver</span>=<span class="value">&#123;this.handlerMouseOver.bind(this)&#125;</span></span><br><span class="line">                <span class="attribute">onMouseOut</span>=<span class="value">&#123;this.handlerMouseOut.bind(this)&#125;</span></span><br><span class="line">            &gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">checked</span>=<span class="value">&#123;this.props.isDone&#125;</span> <span class="attribute">onChange</span>=<span class="value">&#123;this.handlerChange.bind(this)&#125;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">span</span> <span class="attribute">style</span>=<span class="value">&#123;doneStyle&#125;</span>&gt;</span>&#123;this.props.text&#125;<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="title">button</span> <span class="attribute">style</span>=<span class="value">&#123;&#123;'display':</span> '<span class="attribute">none</span>'&#125;&#125; <span class="attribute">ref</span>=<span class="value">"deleteBtn"</span> <span class="attribute">onClick</span>=<span class="value">&#123;this.handlerDelete.bind(this)&#125;</span>  <span class="attribute">className</span>=<span class="value">"fr"</span>&gt;</span>删除<span class="tag">&lt;/<span class="title">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">        )</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在TodoItem主要处理多个交互，包括修改任务状态，删除任务。还有就是鼠标移到相应的任务上才显示删除按钮。</p>
+<p>我们可以看到<code>render()</code>函数，是控制了任务的样式。标签内的style是需要接受一个对象的，所以所有的CSS属性名，都要变成驼峰形的。</p>
+<h1 id="总结">总结</h1><hr>
+<p>其实真正的回过头看React-Todos，会觉得React带给我们的组件化的思想用起来太舒服了。我们通过父组件来控制状态，并通过props传递，来保证组件内的状态一致。我们可以非常有效的维护我们的交互代码，因为我们一眼就知道，这个事件属于哪个组件管理。它的模型其实非常轻，只有View层，但是它带给我们全新的书写前端组件的方法是非常好的，我个人认为如果未来的站点交互性愈来愈多，React是很有可能代替JQuery成为必备的技能。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+            <a href="/tags/react/"> #react </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/18/webpack体验/">webpack体验</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://pic.cnitblog.com/avatar/670552/20150406134605.png" alt="Yika J" />
+          <p class="site-author-name">Yika J</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/YikaJ" target="_blank">GitHub</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.cnblogs.com/YikaJ/" target="_blank">cnblogs</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/yika-j" target="_blank">ZhiHu</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开始之前"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#学习前提"><span class="nav-number">1.1.</span> <span class="nav-text">学习前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能需求"><span class="nav-number">1.2.</span> <span class="nav-text">功能需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目下载"><span class="nav-number">1.3.</span> <span class="nav-text">项目下载</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正式开始"><span class="nav-number">2.</span> <span class="nav-text">正式开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载npm模块"><span class="nav-number">2.1.</span> <span class="nav-text">加载npm模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置webpack"><span class="nav-number">2.2.</span> <span class="nav-text">配置webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析各个组件"><span class="nav-number">2.3.</span> <span class="nav-text">分析各个组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#App组件"><span class="nav-number">2.3.1.</span> <span class="nav-text">App组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#App状态state"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">App状态state</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#App方法"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">App方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AppHeader组件"><span class="nav-number">2.3.2.</span> <span class="nav-text">AppHeader组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AppFooter组件"><span class="nav-number">2.3.3.</span> <span class="nav-text">AppFooter组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TodoMain"><span class="nav-number">2.3.4.</span> <span class="nav-text">TodoMain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TodoItem"><span class="nav-number">2.3.5.</span> <span class="nav-text">TodoItem</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Yika J</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+  
+
+  
+
+    
+      
+    
+
+    <script type="text/javascript">
+      var disqus_shortname = 'YikaJ';
+      var disqus_identifier = '2015/06/18/React-Todos/';
+      var disqus_title = 'React-Todos';
+      var disqus_url = 'http://yoursite.com/2015/06/18/React-Todos/';
+
+      (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    </script>
+  
+
+
+
+
+  
+  
+
+</body>
+</html>
