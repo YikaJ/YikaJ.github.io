@@ -1,0 +1,403 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+
+
+  <meta name="keywords" content="FE,前端工程师,NodeJs" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?243430500f1636a80d2478898c748ad1";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <title> Yika J's Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column 
+  
+">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Yika J's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+  <div id="posts" class="posts-expand">
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/01/31/递归算法，JavaScript实现/">
+                递归算法，JavaScript实现
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-01-31
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/01/31/递归算法，JavaScript实现/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/01/31/递归算法，JavaScript实现/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>　　我们先来看一下定义。递归算法，是将问题转化为规模缩小的同类问题的子问题，每一个子问题都用一个同样的算法去解决。一般来说，一个递归算法就是函数调用自身去解决它的子问题。</p>
+<p>　　递归算法的特点：</p>
+<ol>
+<li>在函数过程中调用自身。</li>
+<li>在递归过程中，必须有一个明确的条件判断递归的结束，既递归出口。</li>
+<li>递归算法简洁但效率低，通常不作为推荐算法。</li>
+</ol>
+<p>　　上面这些是百度百科的解释，讲的也是十分明确，大家配合实例来细细琢磨。</p>
+<hr>
+<p>　　<strong>阶乘</strong></p>
+<p><strong>　　</strong>问题描述： n! = n<em>(n-1)</em>…2*1</p>
+<p>　　代码实现：</p>
+<p>　　<img src="data:image/png;base64,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" alt=""></p>
+<p>　　我们拿到问题的时候，我们按照定义的说明，可以先将规模缩小到同类的子问题。比如，n! 是等于 n<em> (n-1)!，然后(n-1)! = (n-1)</em>(n-2)!。这样依次往下推，直到if的出口。这里用了arguments.callee，是为了防止函数名的紧密耦合，在这里它等同于factorial(n-1)。函数实现起来是不是简洁明了呢。当然因为问题规模简单，其实用循环也是可以实现的，大家可以尝试一下。</p>
+<hr>
+<p>　　<strong>斐波那契数列</strong></p>
+<p><strong>　　</strong>问题描述：1, 1, 2, 3, 5, 8, 13, 21, 34, ……. 求第n个数是多少。</p>
+<p>　　代码实现：</p>
+<p>　　<img src="data:image/png;base64,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" alt=""></p>
+<p>　　其实用刚才的想法实现，也是非常的简单的。通过分析可以得到第n个数，是前两个数的和，通过这个我们就可以通过递归，不断获得所需要的前两个数，直到n&lt;= 2这个条件返回1。<br>　　<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/01/31/递归算法，JavaScript实现/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+  </div>
+
+  
+  <div class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://pic.cnitblog.com/avatar/670552/20150406134605.png" alt="Yika J" />
+          <p class="site-author-name">Yika J</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/YikaJ" target="_blank">GitHub</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.cnblogs.com/YikaJ/" target="_blank">cnblogs</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/yika-j" target="_blank">ZhiHu</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </div>
+
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Yika J</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+  
+
+  
+
+    
+      
+    
+
+    <script type="text/javascript">
+      var disqus_shortname = 'YikaJ';
+      var disqus_identifier = 'page/4/index.html';
+      var disqus_title = '';
+      var disqus_url = '';
+
+      (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    </script>
+  
+
+
+
+
+  
+  
+
+</body>
+</html>

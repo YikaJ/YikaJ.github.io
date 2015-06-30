@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="javascript,算法," />
+  <meta name="keywords" content="Chrome," />
 
 
 
@@ -53,7 +53,7 @@
 
 
 
-  <title> binarySearch二分查找——Javascript实现 // Yika J's Blog </title>
+  <title> （转）Chrome开发者工具不完全指南（一、基础功能篇） // Yika J's Blog </title>
 </head>
 
 <body>
@@ -125,7 +125,7 @@
           
           
             
-              binarySearch二分查找——Javascript实现
+              （转）Chrome开发者工具不完全指南（一、基础功能篇）
             
           
         </h1>
@@ -133,7 +133,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-02
+          发表于 2015-06-30
         </span>
 
         
@@ -142,8 +142,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/02/binarySearch二分查找——Javascript实现/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/02/binarySearch二分查找——Javascript实现/"></span>
+            <a href="/2015/06/30/Chrome开发者工具不完全指南1/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/30/Chrome开发者工具不完全指南1/"></span>
             </a>
           </span>
           
@@ -157,14 +157,100 @@
       
 
       
-        <p>在很早之前，我就写过了一篇也关于二分法的相关博文：<a href="http://www.cnblogs.com/YikaJ/p/4129569.html" target="_blank" rel="external">JavaScript快排与原生sort的测试</a>。当时是用二分法进行快速排序，其实和这次思路大致相当。二分查找最重要的一个条件，就是需要将数组先按照从小到大的顺序进行排序后，方可进行查找。</p>
-<p>一起来想想大致的思路：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> binarySearch函数需要接收的参数是：一个预先排序好的数组，一个需要查找的目标值，左边界和右边界。</span><br><span class="line"><span class="number">2.</span> 让数组的中值和目标值比较，若相等，则返回中值所在的序号，函数结束。若不相等，进行第三步</span><br><span class="line"><span class="number">3.</span> 不相等，则进行大小比较，若目标比中值小，则范围缩小到左边界到中值，并重新返回第一步。反之，范围缩小到中值到右边界，返回第一步。</span><br><span class="line"><span class="number">4.</span> 找不到则是，中值序号等于左边界或右边界，返回-<span class="number">1</span>。</span><br></pre></td></tr></table></figure>
-<p>这个伪代码，写的还是有点凌乱的。最主要的思想还是在于递归。一起实现上述的代码吧。我用的是coffeeScript实现的，除了某些地方我会指出来，大致都能看懂的。若对coffeeScript感兴趣的同学，可以移步：<a href="http://coffee-script.org" target="_blank" rel="external">CoffeeScript中文</a>。还是要强调一下，coffee的块级判断是靠缩进层次的。所以使用时，千万不要空格和Tab缩进混用。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">binarySearch = (dataArr, target, start = <span class="number">0</span>, end = dataArr.length-<span class="number">1</span>)-&gt;</span><br><span class="line">  # 若不传参，参数默认: start = <span class="number">0</span>, end = dataArr.length - <span class="number">1</span></span><br><span class="line">  </span><br><span class="line">  middle = <span class="built_in">parseInt</span>((start + end) / <span class="number">2</span>) # 取中间序号</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span> <span class="keyword">if</span> middle == start or middle == end # 查询失败</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(dataArr[middle] == target)</span><br><span class="line">    <span class="keyword">return</span> middle  # 查询成功</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target &lt; dataArr[middle])</span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, <span class="number">0</span>, middle-<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, middle+<span class="number">1</span>, end)</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>想一下，为了某些没用过Coffee的同学，还是把它编译出来的Js也一同放上吧。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> binarySearch = <span class="function"><span class="keyword">function</span>(<span class="params">dataArr, target, start, end</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> middle;</span><br><span class="line">  <span class="keyword">if</span> (start == <span class="literal">null</span>) &#123;</span><br><span class="line">    start = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (end == <span class="literal">null</span>) &#123;</span><br><span class="line">    end = dataArr.length - <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  middle = <span class="built_in">parseInt</span>((start + end) / <span class="number">2</span>);</span><br><span class="line">  <span class="keyword">if</span> (middle === start || middle === end) &#123;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (dataArr[middle] === target) &#123;</span><br><span class="line">    <span class="keyword">return</span> middle;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (target &lt; dataArr[middle]) &#123;</span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, <span class="number">0</span>, middle - <span class="number">1</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, middle + <span class="number">1</span>, end);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <p>本篇转载自<a href="http://www.cnblogs.com/constantince/p/4565261.html" target="_blank" rel="external">卖烧烤夫斯基</a>，并做了小部分的修改。</p>
+<p>原文地址：<a href="http://www.cnblogs.com/constantince/p/4565261.html" target="_blank" rel="external">Chrome开发者工具不完全指南（一、基础功能篇）</a></p>
+<p>原作者：卖烧烤夫斯基</p>
+<hr>
+<p>就算你不是一名前端开发工程师，相信你也不会对Chrome浏览器感到陌生。根据最新的一份（2015/06）的浏览器市场占有率报告，Chrome近乎占有浏览器天下的半壁江山。简单、快捷使它成为了新时代人们的新宠。如果你是一名web开发人员，我推荐你使用Chrome。作为前端开发的”IDE”，你只需要搭配一个编辑器就能完成几乎所有的开发任务了。关于它的使用和功能分析要么都是大而不全，要么是巨细糜烦。本系会比较详细地分享卤煮的一些Chrome（F12开发者功能）使用经验，从一些基础的功能开始到它的一些高级性能分析器（Timeline、Profiles）,在最后，将会推荐几款好的插件，希望对您的开发工作有些许的作用。如果你对一些面板模块功能已经很了解可以直接跳过去阅读你感兴趣的部分。</p>
+<h1 id="Elements">Elements</h1><hr>
+<p><img src="http://images0.cnblogs.com/blog2015/612959/201506/100955456915046.png" alt="界面图片"></p>
+<p>在Elements中主要分两块大的部分：</p>
+<p>A. HTML结构面板<br>B. 操作DOM样式、结构、时间的显示面板</p>
+<ol>
+<li><p>在A中，每当你的鼠标移动到任何一个元素上，对应的HTML视图中会给该元素蓝色的背景。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100955564262466.png" alt="例子"></p>
+</li>
+<li><p>如果你单击选中一个元素，在A部分的底部，会显示该元素在HTML结构中的位置关系。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100956065195716.png" alt="例子"></p>
+</li>
+<li><p>然后你可以在B部分的styles选项中编辑该元素的样式，并且看到HTML结构的实时更新，无需刷新。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100956191139535.png" alt="例子"></p>
+</li>
+<li><p>你可以在B界面中切换到Event Listener选项，观察该元素绑定的事件。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100956275661086.png" alt="例子"></p>
+<ul>
+<li><code>click</code> 是事件名称</li>
+<li><code>.div1</code> 事件是索引名称（也就是通过什么进行绑定）</li>
+<li><code>attachment</code> 事件来源</li>
+<li><code>handler</code> 事件回调的详细内容</li>
+<li><code>useCapture</code> 事件是否为向上冒泡<a id="more"></a></li>
+</ul>
+</li>
+<li><p>选中一个元素，右击鼠标，你会看到有一个弹出窗口出现，里面有若干选项。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100956377237849.png" alt="example"></p>
+<ul>
+<li><code>Add attribute</code> 为元素添加属性</li>
+<li><code>Edit attribute</code> 修改元素属性</li>
+<li><code>Force element state</code> 为元素激活某种状态，<code>:hover</code>, <code>:focus</code>等</li>
+<li><code>Edit as HTML</code> 编辑该元素（可以重写整个content）甚至修改它的标签名称</li>
+<li>略过一些 cut、copy……</li>
+<li><code>Break on</code> 为元素添加dom操作事件监听。包含三个选项（树结构改变、属性改变、节点移除）。这个选项是帮助我们监控和定位操作元素的代码。请参看下图事例：<br>  <img src="http://images0.cnblogs.com/blog2015/612959/201506/100956487234955.png" alt=""></li>
+</ul>
+</li>
+<li><p>在A界面的弹出选项窗口中选择node removal，在B界面切换到DOM Breakpoints选项，可以看到有注册信息。然后我们点击click me按钮触发删除div3的事件，可以看到浏览器自动为我们定位删除该元素的代码部分，并且停止执行js代码：</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/100957014575733.png" alt="example"></p>
+</li>
+<li><p>在B界面中切换到Properties选项，可以看到选中元素的各种信息（英文单词里面的介绍比较简单，就不一一介绍了）。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101012580197563.png" alt="example"></p>
+</li>
+<li><p>点击A界面的任意地方，按搜索的快捷键，可以在输入框中查找任何内容，若匹配到都会在A面板中高亮显示。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101031029261785.png" alt="example"></p>
+</li>
+<li><p>或者你可以点击左上角的问号图标，然后把鼠标移入到网页内，点击想要查看的元素，会在A面板中显示相应的元素。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101031267386411.png" alt="example"></p>
+</li>
+</ol>
+<h1 id="Network">Network</h1><hr>
+<p><img src="http://images0.cnblogs.com/blog2015/612959/201506/101110162384335.png" alt="example"></p>
+<ol>
+<li><p>Network是一个监控当前网页所有的http请求的面板，它主体部分展示了每个http请求相应的信息。</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101110356609235.png" alt="example"></p>
+<ul>
+<li><code>Name</code> 请求文件名称</li>
+<li><code>Method</code> 方法（常见为get和post）</li>
+<li><code>Status</code> 请求的状态</li>
+<li><code>Type</code> 请求的类型</li>
+<li><code>Initiator</code> 请求源，也就是该链接是通过什么发起请求的（常见位Parser、Script）</li>
+<li><code>Size</code> 下载文件或者请求占的资源大小</li>
+<li><code>Time</code> 请求或下载时间</li>
+<li><code>Timeline</code> 该链接在发送过程中的时间状态轴（我们可以把鼠标移到这些红红绿绿的时间轴上，对应的会有它的详细信息：开始下载时间，等待加载时间，自身下载耗时）<br>  <img src="http://images0.cnblogs.com/blog2015/612959/201506/101110593011446.png" alt="example"></li>
+</ul>
+</li>
+<li><p>单击面板中的任意一条http信息，会在底部弹出一个新的面板，其中记录了该条Http请求的详细参数Header（表头信息、返回信息、请求基本状态）、Preview（返回的格式化转移后的文本信息）、Response(转移之前原始信息)、Cookies（该请求所带的cookies）、Timing（请求时间变化）</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101111234573500.png" alt="example"></p>
+</li>
+<li><p>在主面板的顶部，有一些按钮从左到右它们的功能分别是：</p>
+<ol>
+<li>是否启用持续Http监控（默认高亮启用）</li>
+<li>清空主面板中的http信息</li>
+<li>是否启用过滤信息选项（默认启用，可以对Http信息进行筛选过滤）</li>
+<li>列出多重属性</li>
+<li>只列出name和time属性</li>
+<li><code>preserve log</code> 当新加载页面时不清除面板的请求信息</li>
+<li><p><code>disable cache</code> 禁用缓存</p>
+<p><img src="http://images0.cnblogs.com/blog2015/612959/201506/101111464264082.png" alt="example"></p>
+</li>
+</ol>
+</li>
+<li><p>最后在主面板的底部有记录了整体网络请求状态的一些基本信息</p>
+<p> <img src="http://images0.cnblogs.com/blog2015/612959/201506/101111599261758.png" alt="example"></p>
+</li>
+</ol>
+<h1 id="Resources">Resources</h1><hr>
+<p>Resources部分比较简单，它向我们展示了本页面所加载的资源列表。还有Cookies和Local Storage、Session Storaged等本地储存信息。在这里，我们可以自由地增删改本地存储信息。</p>
+<p><img src="http://images0.cnblogs.com/blog2015/612959/201506/101135242853686.png" alt="example"></p>
+<p>至于webSql，我知道的并不多，在开发中很少用到。如果你想了解这方面的信息，我推荐你去阅读<a href="http://www.cnblogs.com/chuncn/archive/2010/11/22/1884783.html" target="_blank" rel="external">这篇博客</a>。</p>
+
       
     </div>
 
@@ -172,9 +258,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/算法/"> #算法 </a>
+            <a href="/tags/Chrome/"> #Chrome </a>
           
         </div>
       
@@ -183,13 +267,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/06/Javascript函数柯里化/">Javascript函数柯里化</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/01/KMP算法——Javascript实现/">KMP算法——Javascript实现</a>
+              <a href="/2015/06/18/React-Todos/">React-Todos</a>
             
           </div>
         </div>
@@ -311,7 +393,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Elements"><span class="nav-number">1.</span> <span class="nav-text">Elements</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Network"><span class="nav-number">2.</span> <span class="nav-text">Network</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Resources"><span class="nav-number">3.</span> <span class="nav-text">Resources</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -539,9 +621,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'YikaJ';
-      var disqus_identifier = '2015/04/02/binarySearch二分查找——Javascript实现/';
-      var disqus_title = 'binarySearch二分查找——Javascript实现';
-      var disqus_url = 'http://yoursite.com/2015/04/02/binarySearch二分查找——Javascript实现/';
+      var disqus_identifier = '2015/06/30/Chrome开发者工具不完全指南1/';
+      var disqus_title = '（转）Chrome开发者工具不完全指南（一、基础功能篇）';
+      var disqus_url = 'http://yoursite.com/2015/06/30/Chrome开发者工具不完全指南1/';
 
       (function(){
         var dsq = document.createElement('script');
