@@ -127,6 +127,276 @@
           
           
             
+              <a class="post-title-link" href="/2015/06/18/webpack体验/">
+                webpack体验
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-18
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/18/webpack体验/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/18/webpack体验/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>最近在看许多React的资料，发现了大部分的项目都是用<a href="webpack.github.io">webpack</a>行模块化管理的工具。这次也是借着写了一个React-Todos的小应用，对webPack最基本实用的功能体验了一番，顺带做个小记录。</p>
+<h1 id="为什么用webpack">为什么用webpack</h1><hr>
+<h2 id="CommonJs与AMD">CommonJs与AMD</h2><p>在一开始，我们先讲一下它和以往我们所用的模块管理工具有什么不一样。在最开始的阶段，Js并没有这些模块机制，各种Js到处飞，得不到有效妥善的管理。后来前端圈开始制定规范，最耳熟能详的是CommonJs和AMD。</p>
+<p>CommonJs是应用在NodeJs，是一种同步的模块机制。它的写法大致如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> firstModule = <span class="built_in">require</span>(<span class="string">"firstModule"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//your code...</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.export = anotherModule</span><br></pre></td></tr></table></figure>
+<p>AMD的应用场景则是浏览器，异步加载的模块机制。<a href="requirejs.cn">require.js</a>的写法大致如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">define([<span class="string">'firstModule'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">module</span>)</span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//your code...</span></span><br><span class="line">	<span class="keyword">return</span> anotherModule</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>其实我们单比较写法，就知道CommonJs是更为优秀的。它是一种同步的写法，对Human友好，而且代码也不会繁琐臃肿。但更重要的原因是，<strong>随着npm成为主流的JavaScript组件发布平台，越来越多的前端项目也依赖于npm上的项目，或者自身就会发布到npm平台。</strong>所以我们对如何可以使用npm包中的模块是我们的一大需求。所以<a href="browserify.org">browserify</a>工具就出现了，它支持我们直接使用<code>require()</code>的同步语法去加载npm模块。</p>
+<p>当然我们这里不得不说的是，ES2015（ES6）里也有了自己的模块机制，也就是说ES6的模块机制是官方规定的，我们通过<a href="https://babeljs.io/">babel</a>（一种6to5的编译器）可以使用比较多的新特性了，包括我们提到的模块机制，而它的写法大致如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;someModule&#125; <span class="keyword">from</span> <span class="string">"someModule"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// your codes...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> anotherModule;</span><br></pre></td></tr></table></figure>
+<p>当然上面的写法只是最基本的，还有其他的不同加载模块的写法，可以看一下阮一峰老师的<a href="http://es6.ruanyifeng.com/#docs/class">ECMAScript 6 入门</a>或者babel的相关文档<a href="https://babeljs.io/docs/learn-es2015/#modules">Learn ES2015</a>。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/06/18/webpack体验/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/05/12/异步编程之co——源码分析/">
+                异步编程之co——源码分析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-12
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/05/12/异步编程之co——源码分析/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/12/异步编程之co——源码分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="如何使用co">如何使用co</h1><hr>
+<p>大家如果能消化掉前面的知识，相信这一章的分析也肯定是轻轻松松的。我们这一章就来说说，我们之前一直高调提到的<code>co</code>库。<code>co</code>库，它用Generator和Promise相结合，完美提升了我们异步编程的体验。我们首先看看如何使用<code>co</code>的，我们仍旧以之前的读取Json文件的例子看看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意readFile已经是Promise化的异步API </span></span><br><span class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> filename = <span class="keyword">yield</span> readFile(<span class="string">'hello3.txt'</span>, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">var</span> json = <span class="keyword">yield</span> readFile(filename, <span class="string">'utf-8'</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(json).message;</span><br><span class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error);</span><br></pre></td></tr></table></figure>
+<p>大家看上面的代码，甚至是可以使用同步的思维，不用去理会回调什么鬼的。我们<code>readFile()</code>得到<code>filename</code>，然后再次<code>readFile()</code>得到<code>json</code>，解析完json后输出就结束了，非常清爽。大家如果不相信的话，可以使用原生的异步api尝试一下，<code>fs.readFile()</code>像上面相互有依赖的，绝对恶心！</p>
+<p>我们可以看到，仅仅是在promise化的异步api前有个<code>yield</code>标识符，就可以使<code>co</code>完美运作。上一篇我们也假想过<code>co</code>的内部是如何实现的，我们再理（fu）顺（zhi）一次：</p>
+<ol>
+<li>我们调用遍历器的<code>next()</code>得到该异步的promise对象</li>
+<li>在promise对象的<code>then()</code>中的<code>resolve</code>对数据进行处理</li>
+<li>把处理后的数据作为参数<code>res</code>传入<code>next(res)</code>，继续到下一次异步操作</li>
+<li>重复2，3步骤。直到迭代器的<code>done: true</code>，结束遍历。</li>
+</ol>
+<p><em>如果不清楚我们上面说过的Generator遍历器或promise对象的，可以先放一放这篇文章，从之前的几篇看起。</em></p>
+<h1 id="进入co的世界">进入co的世界</h1><hr>
+<h2 id="获得遍历器">获得遍历器</h2><p>co的源码包括注释和空行仅仅才240行，不能再精简！我们抽出其中主要的代码来进行分析。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">co</span>(<span class="params">gen</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ctx = <span class="keyword">this</span>; <span class="comment">// context</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// return a promise</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> gen === <span class="string">'function'</span>) gen = gen.call(ctx); <span class="comment">// 调用构造器来获得遍历器</span></span><br><span class="line">    <span class="keyword">if</span> (!gen || <span class="keyword">typeof</span> gen.next !== <span class="string">'function'</span>) <span class="keyword">return</span> resolve(gen);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//...下面代码暂时省略...</span></span><br><span class="line">   &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们需要关注的有两点：</p>
+<ol>
+<li>co函数最终返回的是一个Promise。</li>
+<li>第6行代码，我们可以看到gen变量一开始就已经自身调用了。也就是gen从构造器变成了遍历器。
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/05/12/异步编程之co——源码分析/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/05/08/异步编程之Generator（2）——剖析特性/">
+                异步编程之Generator(2)——剖析特性
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-08
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/05/08/异步编程之Generator（2）——剖析特性/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/08/异步编程之Generator（2）——剖析特性/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="Generator基础">Generator基础</h1><hr>
+<p>继上一篇见识过其配合promise带来的超爽的异步编程体验，我想应该大部分同学都会想好好看一下，到底这个Generator是什么？接下来我们会对Generator的特性进行剖析，让我们对接下来学习<code>co</code>源码打个扎实的基础。</p>
+<h2 id="起源">起源</h2><p>我们首先得知道，Generator一开始并不是用来做异步编程的，是后来的大牛们挖掘了它的特性，让它在异步编程里大放异彩。其实Generator是生成遍历器的构造器，ES6定义了一个遍历器的接口Iterator。任何数据结构满足Iterator接口，都可以统一实现遍历操作。一步一步的调用<code>next()</code>或者<code>for..of</code>循环都可以遍历实现Iterator接口的数据结构。</p>
+<p>我们简单说一下遍历对象的<code>next()</code>是怎样的：</p>
+<ol>
+<li>第一次调用<code>next()</code>会直接指向第一个数据的位置，然后返回数据的信息。结构是这样的：<code>{value: AnyType, done: Boolean}</code>。<code>value</code>属性是指该数据的值，<code>done</code>则是标志是否已经true，结束了。</li>
+<li>再一次调用<code>next()</code>则指向下一个数据，返回相应的数据信息。</li>
+<li>重复第二步，一直到数据结束，返回<code>{value: undefined, done: true}</code>。则表示遍历已经全部完成。</li>
+</ol>
+<p>这就是Iterator最基本的实现，当然这里是很片面的，若要展开说，基本又是一大篇文章可以写。这里就直接给出阮一峰老师关于Iterator的文章：<a href="es6.ruanyifeng.com">10. Iterator和for…of循环</a></p>
+<h2 id="定义">定义</h2><p>在我们知道了Generator生成的遍历对象是什么之后，我们看一下如何定义这样的Generator函数。对上一篇有印象的同学，应该记得函数标识符后面有一个诡异的星号<code>function* ()</code>。其实这个星号在括号前也是没关系的，这里我是参考了<code>co</code>源码的。我们一旦定义了一个带星号的函数之后，用这个构造器生成的对象在harmony模式里就成了Generator对象（下面我会称其为遍历器）。我们可以测试一下一段代码。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> toString = <span class="built_in">Object</span>.prototype.toString;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Generator = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">"world"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gen = Generator(); <span class="comment">// 可以省去new来创建对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(Generator)); <span class="comment">// [object Function]</span></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(gen));       <span class="comment">// [object Generator]</span></span><br></pre></td></tr></table></figure>
+<p>这样我们通过调用特殊定义的Generator构造器，生成一个遍历器([object Generator])。那我们要遍历的话必须得知道遍历的每个成员，<code>yield</code>就是用来定义遍历成员的。也就是说，遍历器进行遍历的时候会以<code>yield</code>为间隔，一个<code>yield</code>一个成员，不断往下走直到不存在下一个<code>yield</code>。</p>
+<p>在上面的例子中，就是第一次遍历到<code>yield</code>得到”hello”，第二次继续执行遍历操作到<code>yield</code>得到”world”，最后再执行就发现没有了，也就是<code>done: true</code>结束遍历。</p>
+<p>接下来我们会详细说一下，遍历器是遍历的各种特性。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/05/08/异步编程之Generator（2）——剖析特性/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/05/06/异步编程之Generator（1）——领略魅力/">
                 异步编程之Generator(1)——领略魅力
               </a>
@@ -297,265 +567,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/30/异步编程之Promise（2）：探究原理/">
-                异步编程之Promise(2)：探究原理
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-30
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/30/异步编程之Promise（2）：探究原理/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/30/异步编程之Promise（2）：探究原理/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>异步编程系列教程：</p>
-<ol>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
-</ol>
-<h1 id="动手实现Promise">动手实现Promise</h1><p>在异步编程之Promise(1)里，我是翻译了一篇文章，里面是探究promise的模式和领略它的魅力。我们可以利用promise，缓解回调函数给我们带来的回调金字塔。使用链式结构书写，使代码更加简洁易懂，易于控制。但是对于构造promise和其内部的实现，却用草草的一句<code>new Promise()</code>就带过。这一次，借着阅读朴灵大神的《深入浅出Node.Js》，我们自己动手实现一个小小的基本的promise吧。</p>
-<h2 id="构建Promise对象">构建Promise对象</h2><p>首先我们需要回顾一下，一个Promise/A模式和API上是如何定义的：</p>
-<ul>
-<li>Promise分别有三个状态：pending初始状态，fulfilled完成状态，rejected失败状态。</li>
-<li>一旦promise是fulfilled状态或rejected状态，那么它就是不会再改变的。</li>
-<li>具备<code>then()</code>方法，用于接收fulfilled和rejected状态的回调方法，并在相应状态下进行触发。</li>
-<li><code>then()</code>方法只允许接受function对象，其余的会被忽略。</li>
-<li><code>then()</code>方法会返回Promise对象，提供链式调用。</li>
-<li><code>then()</code>方法可接收第三个方法，用于支持progress事件的回调方法。</li>
-</ul>
-<p>知道我们的Promise对象需要有什么之后，我们就可以开始尝试写Promise的构造函数了。还有Promise是基于事件机制的，也可以说是发布/订阅模式。所以我们为了演示方便，将使用Node里的events模块。</p>
-<p>还不清楚自定义事件的同学，推荐一个视频给你们入门：<a href="http://imooc.com/video/1650">阿当大话西游之WEB组件</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>); <span class="comment">//events模块</span></span><br><span class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);     <span class="comment">//util工具包模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MyPromise = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    events.EventEmitter.call(<span class="keyword">this</span>); </span><br><span class="line">&#125;;</span><br><span class="line">util.inherits(MyPromise, events.EventEmitter); <span class="comment">// 继承</span></span><br><span class="line"></span><br><span class="line">MyPromise.prototype.then = <span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject, progress</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// this.once()是绑定事件被触发后立即移除事件</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> resolve === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.once(<span class="string">'success'</span>, resolve);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> reject === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.once(<span class="string">'error'</span>, reject);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> progress === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="comment">// 不需要once()</span></span><br><span class="line">        <span class="keyword">this</span>.on(<span class="string">'progress'</span>, progress);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>由此，我们就实现了Promise/A规范。我们用promise对象的then，用相应的事件存放了各个状态的回调函数。那接下来，我们就要知道如何触发这些事件。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/30/异步编程之Promise（2）：探究原理/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/">
-                (翻译)异步编程之Promise(1)：初见魅力
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-30
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>原文：<a href="https://www.promisejs.org/">https://www.promisejs.org/</a></p>
-<p>by Forbes Lindesay </p>
-<p>异步编程系列教程：</p>
-<ol>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
-<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
-</ol>
-<h1 id="动机">动机</h1><hr>
-<p>思考一下，下面这段用来读取文件并解析JSON的Javascript同步代码。它很简单并且易于阅读，但是因为它会阻塞代码，你并不会想用在大多数的应用里。这意味着，当你用它来读取文件的时候（它需要很多时间）不会有其他的事情发生。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSONSync</span>(<span class="params">filename</span>)</span>&#123;</span><br><span class="line">	<span class="comment">// 读取文件后，再解析成JSON</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(fs.readFileSync(filename, <span class="string">'utf-8'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>为了让我们的应用高性能且实时响应，我们需要让所有涉及到IO的操作都变成异步的。最简单的方法去实现它就是使用callback回调。然而，一个幼稚不成熟的代码实现也许会让它出错。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSON</span>(<span class="params">filename, callback</span>)</span>&#123;</span><br><span class="line">    fs.readFile(filename, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, res</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err)</span><br><span class="line">            <span class="keyword">return</span> callback(err);</span><br><span class="line">        <span class="comment">// 回调参数为，错误null和文件解析后的JSON</span></span><br><span class="line">        callback &amp;&amp; callback(<span class="literal">null</span>, <span class="built_in">JSON</span>.parse(res));</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>出现的问题：</p>
-<ul>
-<li>额外的<code>callback</code>回调参数会使我们困惑，不知道变量到底是输入值还是返回值。</li>
-<li>It doesn’t work at all with control flow primitives.（这里我无法理解控制什么流呢？）</li>
-<li>无法处理由<code>JSON.parse</code>抛出的错误。</li>
-</ul>
-<p>我们需要处理由<code>JSON.parse</code>抛出的错误，但是我们同样也需要小心不要影响到了由<code>callback</code>函数抛出的错误。最后我们用一堆混乱的错误处理完成了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSON</span>(<span class="params">filename, callback</span>)</span>&#123;</span><br><span class="line">	fs.readFile(filename, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, res</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(err)</span><br><span class="line">			<span class="keyword">return</span> callback(err);</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			res = <span class="built_in">JSON</span>.parse(res);</span><br><span class="line">		&#125; <span class="keyword">catch</span>(ex)&#123;</span><br><span class="line">			<span class="keyword">return</span> callback(ex);</span><br><span class="line">		&#125;</span><br><span class="line">		callback(<span class="literal">null</span>, res);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>尽管有这些杂乱代码来处理错误，我们仍然留下一个问题就是<code>callback</code>烦人的回调参数。Promise可以帮助你更自然的处理错误，没有<code>callback</code>的参数使代码更简洁，并且用不着修改底层的结构<strong><em>（意思是你可以用原生Js来实现promise，并且用它来封装已经存在的异步操作）</em></strong></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/">
-                记拿到鹅厂前端开发暑期实习offer的经历
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-29
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h1 id="想起来时的路">想起来时的路</h1><hr>
-<p>在真正拿到腾讯实习offer之前，也是看过不少人的面经，心生向往。很早在入前端坑之前，我就想着大四的时候有机会要尝试去腾讯里实习。</p>
-<p>大一入门语言就是C++，这让我很无奈，所以我很快的就抛下忘记了，留下的只是一堆基本编程和它的面向对象的概念。那会儿我喜欢听摇滚乐，民谣，组乐队，玩音乐。其实玩音乐的人理想才是最让人崇拜的，那种自由，那种对生活的追求。可是我知道自己并不能上道，于是学会了吉他和一丢丢的架子鼓，就开始回到了编程学习。选前端真是无意中的，我只是随手买了一本HTML5的书，然后觉得CSS也不错，最后才知道有Javascript这个东西。后来随着逐步的深入，已经开始心生喜欢。</p>
-<p>我知道有很多书都是骗钱的，于是我去豆瓣，去亚马逊认认真真比较。买了我第一本最重要的书《Javascript高级程序设计》。接下来的整个暑假，我在没有网络的新家里，每日每夜琢磨书上的知识点，因为它真的很奇葩。后来接触到知乎，自己的前端水平的深度和广度的视野也就跟着上来了，就开始知道前端这水非常深。你现在还可以在百度贴吧，看到一堆人求各种JQuery插件，或者一堆问怎么学有没有前途，却始终不肯开始行动的人。<br>我开始知道了前端要解决各种以前从来不会有的问题和各式各样的新技术。例如：<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -594,7 +605,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -608,7 +619,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -658,8 +669,8 @@
       <div class="footer-inner">
         <div class="copyright">
   
-  &copy; &nbsp; 
-  2015
+  &copy; &nbsp;  2015 - 
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

@@ -127,6 +127,265 @@
           
           
             
+              <a class="post-title-link" href="/2015/04/30/异步编程之Promise（2）：探究原理/">
+                异步编程之Promise(2)：探究原理
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-30
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/30/异步编程之Promise（2）：探究原理/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/30/异步编程之Promise（2）：探究原理/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="动手实现Promise">动手实现Promise</h1><p>在异步编程之Promise(1)里，我是翻译了一篇文章，里面是探究promise的模式和领略它的魅力。我们可以利用promise，缓解回调函数给我们带来的回调金字塔。使用链式结构书写，使代码更加简洁易懂，易于控制。但是对于构造promise和其内部的实现，却用草草的一句<code>new Promise()</code>就带过。这一次，借着阅读朴灵大神的《深入浅出Node.Js》，我们自己动手实现一个小小的基本的promise吧。</p>
+<h2 id="构建Promise对象">构建Promise对象</h2><p>首先我们需要回顾一下，一个Promise/A模式和API上是如何定义的：</p>
+<ul>
+<li>Promise分别有三个状态：pending初始状态，fulfilled完成状态，rejected失败状态。</li>
+<li>一旦promise是fulfilled状态或rejected状态，那么它就是不会再改变的。</li>
+<li>具备<code>then()</code>方法，用于接收fulfilled和rejected状态的回调方法，并在相应状态下进行触发。</li>
+<li><code>then()</code>方法只允许接受function对象，其余的会被忽略。</li>
+<li><code>then()</code>方法会返回Promise对象，提供链式调用。</li>
+<li><code>then()</code>方法可接收第三个方法，用于支持progress事件的回调方法。</li>
+</ul>
+<p>知道我们的Promise对象需要有什么之后，我们就可以开始尝试写Promise的构造函数了。还有Promise是基于事件机制的，也可以说是发布/订阅模式。所以我们为了演示方便，将使用Node里的events模块。</p>
+<p>还不清楚自定义事件的同学，推荐一个视频给你们入门：<a href="http://imooc.com/video/1650">阿当大话西游之WEB组件</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>); <span class="comment">//events模块</span></span><br><span class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);     <span class="comment">//util工具包模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MyPromise = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    events.EventEmitter.call(<span class="keyword">this</span>); </span><br><span class="line">&#125;;</span><br><span class="line">util.inherits(MyPromise, events.EventEmitter); <span class="comment">// 继承</span></span><br><span class="line"></span><br><span class="line">MyPromise.prototype.then = <span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject, progress</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// this.once()是绑定事件被触发后立即移除事件</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> resolve === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.once(<span class="string">'success'</span>, resolve);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> reject === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.once(<span class="string">'error'</span>, reject);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> progress === <span class="string">'function'</span>)&#123;</span><br><span class="line">        <span class="comment">// 不需要once()</span></span><br><span class="line">        <span class="keyword">this</span>.on(<span class="string">'progress'</span>, progress);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>由此，我们就实现了Promise/A规范。我们用promise对象的then，用相应的事件存放了各个状态的回调函数。那接下来，我们就要知道如何触发这些事件。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/30/异步编程之Promise（2）：探究原理/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/">
+                (翻译)异步编程之Promise(1)：初见魅力
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-30
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>原文：<a href="https://www.promisejs.org/">https://www.promisejs.org/</a></p>
+<p>by Forbes Lindesay </p>
+<p>异步编程系列教程：</p>
+<ol>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%881%EF%BC%89%EF%BC%9A%E5%88%9D%E8%A7%81%E9%AD%85%E5%8A%9B/">(翻译)异步编程之Promise(1)——初见魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/04/30/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%882%EF%BC%89%EF%BC%9A%E6%8E%A2%E7%A9%B6%E5%8E%9F%E7%90%86/">异步编程之Promise(2)：探究原理</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/02/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BPromise%EF%BC%883%EF%BC%89%EF%BC%9A%E6%8B%93%E5%B1%95%E8%BF%9B%E9%98%B6/">异步编程之Promise(3)：拓展进阶</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/06/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E9%A2%86%E7%95%A5%E9%AD%85%E5%8A%9B/">异步编程之Generator(1)——领略魅力</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/08/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8BGenerator%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E5%89%96%E6%9E%90%E7%89%B9%E6%80%A7/">异步编程之Generator(2)——剖析特性</a></li>
+<li><a href="http://yikaj.gitcafe.io/2015/05/12/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B9%8Bco%E2%80%94%E2%80%94%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">异步编程之co——源码分析</a></li>
+</ol>
+<h1 id="动机">动机</h1><hr>
+<p>思考一下，下面这段用来读取文件并解析JSON的Javascript同步代码。它很简单并且易于阅读，但是因为它会阻塞代码，你并不会想用在大多数的应用里。这意味着，当你用它来读取文件的时候（它需要很多时间）不会有其他的事情发生。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSONSync</span>(<span class="params">filename</span>)</span>&#123;</span><br><span class="line">	<span class="comment">// 读取文件后，再解析成JSON</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(fs.readFileSync(filename, <span class="string">'utf-8'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了让我们的应用高性能且实时响应，我们需要让所有涉及到IO的操作都变成异步的。最简单的方法去实现它就是使用callback回调。然而，一个幼稚不成熟的代码实现也许会让它出错。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSON</span>(<span class="params">filename, callback</span>)</span>&#123;</span><br><span class="line">    fs.readFile(filename, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, res</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err)</span><br><span class="line">            <span class="keyword">return</span> callback(err);</span><br><span class="line">        <span class="comment">// 回调参数为，错误null和文件解析后的JSON</span></span><br><span class="line">        callback &amp;&amp; callback(<span class="literal">null</span>, <span class="built_in">JSON</span>.parse(res));</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>出现的问题：</p>
+<ul>
+<li>额外的<code>callback</code>回调参数会使我们困惑，不知道变量到底是输入值还是返回值。</li>
+<li>It doesn’t work at all with control flow primitives.（这里我无法理解控制什么流呢？）</li>
+<li>无法处理由<code>JSON.parse</code>抛出的错误。</li>
+</ul>
+<p>我们需要处理由<code>JSON.parse</code>抛出的错误，但是我们同样也需要小心不要影响到了由<code>callback</code>函数抛出的错误。最后我们用一堆混乱的错误处理完成了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readJSON</span>(<span class="params">filename, callback</span>)</span>&#123;</span><br><span class="line">	fs.readFile(filename, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, res</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(err)</span><br><span class="line">			<span class="keyword">return</span> callback(err);</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			res = <span class="built_in">JSON</span>.parse(res);</span><br><span class="line">		&#125; <span class="keyword">catch</span>(ex)&#123;</span><br><span class="line">			<span class="keyword">return</span> callback(ex);</span><br><span class="line">		&#125;</span><br><span class="line">		callback(<span class="literal">null</span>, res);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管有这些杂乱代码来处理错误，我们仍然留下一个问题就是<code>callback</code>烦人的回调参数。Promise可以帮助你更自然的处理错误，没有<code>callback</code>的参数使代码更简洁，并且用不着修改底层的结构<strong><em>（意思是你可以用原生Js来实现promise，并且用它来封装已经存在的异步操作）</em></strong></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/30/（翻译）异步编程之Promise（1）：初见魅力/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/">
+                记拿到鹅厂前端开发暑期实习offer的经历
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-29
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h1 id="想起来时的路">想起来时的路</h1><hr>
+<p>在真正拿到腾讯实习offer之前，也是看过不少人的面经，心生向往。很早在入前端坑之前，我就想着大四的时候有机会要尝试去腾讯里实习。</p>
+<p>大一入门语言就是C++，这让我很无奈，所以我很快的就抛下忘记了，留下的只是一堆基本编程和它的面向对象的概念。那会儿我喜欢听摇滚乐，民谣，组乐队，玩音乐。其实玩音乐的人理想才是最让人崇拜的，那种自由，那种对生活的追求。可是我知道自己并不能上道，于是学会了吉他和一丢丢的架子鼓，就开始回到了编程学习。选前端真是无意中的，我只是随手买了一本HTML5的书，然后觉得CSS也不错，最后才知道有Javascript这个东西。后来随着逐步的深入，已经开始心生喜欢。</p>
+<p>我知道有很多书都是骗钱的，于是我去豆瓣，去亚马逊认认真真比较。买了我第一本最重要的书《Javascript高级程序设计》。接下来的整个暑假，我在没有网络的新家里，每日每夜琢磨书上的知识点，因为它真的很奇葩。后来接触到知乎，自己的前端水平的深度和广度的视野也就跟着上来了，就开始知道前端这水非常深。你现在还可以在百度贴吧，看到一堆人求各种JQuery插件，或者一堆问怎么学有没有前途，却始终不肯开始行动的人。<br>我开始知道了前端要解决各种以前从来不会有的问题和各式各样的新技术。例如：<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/29/记拿到鹅厂前端开发暑期实习offer的经历/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/04/15/Javascript事件处理进阶/">
                 Javascript事件处理进阶
               </a>
@@ -243,249 +502,12 @@
         
           <p>函数柯里化currying，是函数式编程非常重要的一个标志。它的实现需要满足以下条件，首先就是函数可以作为参数进行传递，然后就是函数可以作为返回值return出去。我们依靠这个特性编写很多优雅酷炫的代码。那我们来看一下最简单的实现。</p>
 <p>大家一般都是举addSum的例子，我当然也不例外。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">add = (num1)-&gt;</span><br><span class="line">  <span class="keyword">return</span> (num2)-&gt;</span><br><span class="line">    <span class="keyword">return</span> num1 + num2;</span><br><span class="line">    </span><br><span class="line">add3 = add(<span class="number">3</span>);</span><br><span class="line">add5 = add(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">add3(<span class="number">5</span>) # 返回<span class="number">8</span></span><br><span class="line">add5(<span class="number">5</span>) # 返回<span class="number">10</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">add = (num1)-&gt;</span><br><span class="line">  return (num2)-&gt;</span><br><span class="line">    return num1 + num2;</span><br><span class="line">    </span><br><span class="line">add3 = add(3);</span><br><span class="line">add5 = add(5);</span><br><span class="line"></span><br><span class="line">add3(5) # 返回8</span><br><span class="line">add5(5) # 返回10</span><br></pre></td></tr></table></figure>
 <p>上述例子其实已经对柯里化的实现，有一个非常好的了解了。其实也就是“分步求值”，我们可以把第一个参数通过闭包保存起来，以供return出去的匿名函数使用。所以我们可以根据add来自定义各种各样的新函数。</p>
 <hr>
 <p>我们要使某个函数可以柯里化，难道一定要在函数创建时，就具有柯里化的特性么？假设我们的add函数，起初并不具有柯里化特性的，我们需要怎么做才能让它柯里化呢？</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2015/04/06/Javascript函数柯里化/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/02/binarySearch二分查找——Javascript实现/">
-                binarySearch二分查找——Javascript实现
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-02
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/02/binarySearch二分查找——Javascript实现/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/02/binarySearch二分查找——Javascript实现/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在很早之前，我就写过了一篇也关于二分法的相关博文：<a href="http://www.cnblogs.com/YikaJ/p/4129569.html">JavaScript快排与原生sort的测试</a>。当时是用二分法进行快速排序，其实和这次思路大致相当。二分查找最重要的一个条件，就是需要将数组先按照从小到大的顺序进行排序后，方可进行查找。</p>
-<p>一起来想想大致的思路：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> binarySearch函数需要接收的参数是：一个预先排序好的数组，一个需要查找的目标值，左边界和右边界。</span><br><span class="line"><span class="number">2.</span> 让数组的中值和目标值比较，若相等，则返回中值所在的序号，函数结束。若不相等，进行第三步</span><br><span class="line"><span class="number">3.</span> 不相等，则进行大小比较，若目标比中值小，则范围缩小到左边界到中值，并重新返回第一步。反之，范围缩小到中值到右边界，返回第一步。</span><br><span class="line"><span class="number">4.</span> 找不到则是，中值序号等于左边界或右边界，返回-<span class="number">1</span>。</span><br></pre></td></tr></table></figure>
-<p>这个伪代码，写的还是有点凌乱的。最主要的思想还是在于递归。一起实现上述的代码吧。我用的是coffeeScript实现的，除了某些地方我会指出来，大致都能看懂的。若对coffeeScript感兴趣的同学，可以移步：<a href="http://coffee-script.org">CoffeeScript中文</a>。还是要强调一下，coffee的块级判断是靠缩进层次的。所以使用时，千万不要空格和Tab缩进混用。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">binarySearch = (dataArr, target, start = <span class="number">0</span>, end = dataArr.length-<span class="number">1</span>)-&gt;</span><br><span class="line">  # 若不传参，参数默认: start = <span class="number">0</span>, end = dataArr.length - <span class="number">1</span></span><br><span class="line">  </span><br><span class="line">  middle = <span class="built_in">parseInt</span>((start + end) / <span class="number">2</span>) # 取中间序号</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span> <span class="keyword">if</span> middle == start or middle == end # 查询失败</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(dataArr[middle] == target)</span><br><span class="line">    <span class="keyword">return</span> middle  # 查询成功</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target &lt; dataArr[middle])</span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, <span class="number">0</span>, middle-<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> binarySearch(dataArr, target, middle+<span class="number">1</span>, end)</span><br></pre></td></tr></table></figure>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/02/binarySearch二分查找——Javascript实现/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/01/KMP算法——Javascript实现/">
-                KMP算法——Javascript实现
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-01
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/01/KMP算法——Javascript实现/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/01/KMP算法——Javascript实现/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>腾讯和阿里的笔试刚过去了，里面有很多题都很值得玩味的。之前Blog积累的很多东西，还要平时看的书，都有很大的帮助。这个深有体会啊！</p>
-<p>例如，腾讯有一道算法题是吃香蕉（好邪恶的赶脚..），一次吃一根或者两根，50根香蕉可以有多少种吃法？当时我一看尼玛，不就是我之前总结过的：<a href="http://www.cnblogs.com/YikaJ/p/4263873.html">递归算法，JavaScript实现</a>。里面的走楼梯的问题，我到现在还是记得的。（但是为了抗议我对卷纸的不专业性，我用CoffeeScript实现了算法…感觉可能会因此跪下。）然后就是有一道选择题，考的是Javascript的闭包陷阱，我一看尼玛，不是我之前总结过的：<a href="http://www.cnblogs.com/YikaJ/p/4133516.html">循环闭包的影响以及其解决方案</a>。我也是一模一样用setTimeout去模拟的。简直不能再爽。当然，也不得不说，腾讯到最后也只有这两题和前端有一点联系。</p>
-<p>相比之下，阿里就好很多了。虽然时间很紧，题目很多，但起码不会一抬眼全是熟悉的陌生人。印象比较深的是《Javascript设计模式》里的观察者模式，还有《Javascript高级程序设计》里的有关CookieUtil的。。但是，我有一题，完全不记得如何做了。那就是今天的主角，KMP算法！</p>
-<hr>
-<p>上面扯淡完毕了。个人博客嘛，随心所欲啦。先给参考资料的地址：<a href="http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html">字符串匹配的KMP算法</a>。这个是阮一峰老师的博文，算是写的很不错的了。想看生动形象的博文的同学可以直接移步过去。</p>
-<p>那这个用于字符串匹配的KMP算法到底怎么用的呢。我们先看看需求：字符串A=”BBCABCDABABCDABCDABDE”里如何快速匹配到a=“ABCDABD”。用伪代码来写这些步骤应该是这样的：</p>
-<ol>
-<li>字符串的首位与子字符串的首位进行匹配，匹配失败，则字符串后移继续匹配。匹配成功，则字符串与子字符串一起后移，继续匹配。</li>
-<li>继续匹配的过程中，最理想的状态便是从头到尾成功，然后匹配过程也就结束了。倘若中途有不匹配的，子字符串就要回滚。</li>
-</ol>
-<p>问题来了：子字符串回滚到哪儿？若是回滚到匹配开始的下一位，那当然是可以的，只不过是做了很多的无用功。所以KMP算法就是为了这个时候诞生的，可以有效的提高效率。</p>
-<p>这里我用阮老师的一张图更好的解释一下。<br><img src="http://image.beekka.com/blog/201305/bg2013050107.png" alt="img"><br>我们可以看到，最佳的回滚位置应该是让子字符串的“C”对应空格。这样我们才可以最优化的处理重复的“AB”这个东西。</p>
-<p>直接看一个公式：<code>回滚位数 = 已匹配的字符数 - 对应的部分匹配值</code>。我们可以看到已经匹配的字符数是6，然后最佳的回滚位数是4，那么对应的部分匹配值应该是2，那这个2是怎么来的？</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/01/KMP算法——Javascript实现/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/02/02/gulp之静态资源防缓存处理/">
-                gulp之静态资源防缓存处理
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-02-02
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/02/02/gulp之静态资源防缓存处理/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/02/gulp之静态资源防缓存处理/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>　　最近，因为校友网项目开始有些规模了。开始就要考虑对静态资源进行工程自动化的管理。一讲到前端的自动化工具，大家或许都会想到Grunt，Gulp，或者百度的FIS。这三个都有各自的特点，大家可以依据自己的喜好，选择工具。至于为什么选择Gulp，因为Grunt的gruntfile配置真的很头大好吗！简直看到头晕晕，但是还是有不少人喜欢这种方式的。然后FIS真心很强大，你所需要的，基本它都提供了，并且做得很好很简单，如果你急于马上使用可以赶紧去看看。而我为什么不用呢，感觉可能是因为，有点黑盒子？哈哈哈….不说了，让我们赶紧看看今天的主角&mdash;&mdash;Gulp。</p>
-<p>　　<strong>定义：<a href="http://gulpjs.com/">gulp.js</a>&nbsp;是一种基于流的，代码优于配置的新一代构建工具。</strong></p>
-<p><strong>　　</strong>关于还要安装Node，怎么样用npm加载需要的Node模块，就不再赘述啦。当然使用yeoman来搭建手脚架是最快的，有兴趣的可以看看，慕课网里有噢。接下来看看我们的案例。我们的需求是，为了防止客户端的静态资源缓存，我们需要每次更新css或js的时候，通过md5或时间戳等方式重新命名静态资源。让客户端可以重新请求资源，而不是从缓存里取。然后html模板里的src也要做相应的修改。当然，这里还有个附加的需要就是，静态资源需要自行优化（压缩合并）。</p>
-<ol>
-<li>静态资源优化</li>
-<li>静态资源重命名</li>
-<li>修改静态资源的引用路径</li>
-</ol>
-<p>　　若是我们手动修改，这会有多麻烦呢？大家可以想一想，我们先用工具压缩了资源，然后手动更改名字，再打开相应的页面，改路径。这样一直枯燥的重复，不仅容易出错，而且尼玛工作量很大好嘛？！程序员自有懒人在，我们就站在懒巨人的肩膀上，沐浴春风。</p>
-<p>　　那在gulpfile中，我们要用到的插件有哪些呢？</p>
-<p>　　<img src="data:image/png;base64,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" alt=""></p>
-<p>　　require完之后，我们就可以开始编写一个简单实用的版本控制的自动化工具了。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/02/02/gulp之静态资源防缓存处理/">
               阅读全文 &raquo;
             </a>
           </div>
@@ -545,7 +567,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -559,7 +581,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -609,8 +631,8 @@
       <div class="footer-inner">
         <div class="copyright">
   
-  &copy; &nbsp; 
-  2015
+  &copy; &nbsp;  2015 - 
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
