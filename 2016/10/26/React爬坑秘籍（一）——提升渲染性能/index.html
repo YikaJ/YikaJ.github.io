@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="FE,前端工程师,NodeJs" />
+  <meta name="keywords" content="React,javascript," />
 
 
 
@@ -53,7 +53,7 @@
 
 
 
-  <title>  // Yika J's Blog </title>
+  <title> React爬坑秘籍（一）——提升渲染性能 // Yika J's Blog </title>
 </head>
 
 <body>
@@ -125,7 +125,7 @@
           
           
             
-              
+              React爬坑秘籍（一）——提升渲染性能
             
           
         </h1>
@@ -133,7 +133,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-10-26
+          发表于 2016-10-26
         </span>
 
         
@@ -142,8 +142,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/10/26/React爬坑秘籍（一）——提升渲染性能/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/10/26/React爬坑秘籍（一）——提升渲染性能/"></span>
+            <a href="/2016/10/26/React爬坑秘籍（一）——提升渲染性能/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/26/React爬坑秘籍（一）——提升渲染性能/"></span>
             </a>
           </span>
           
@@ -157,7 +157,7 @@
       
 
       
-        <h1 id="React爬坑秘籍（一）——提升渲染性能">React爬坑秘籍（一）——提升渲染性能</h1><h2 id="前言">前言</h2><hr>
+        <h2 id="前言">前言</h2><hr>
 <p>来到腾讯实习后，有幸八月份开始了腾讯办公助手PC端的开发。因为办公助手主推的是移动端，所以导师也是大胆的让我们实习生来技术选型并开发，他来做code review。之前也学习过React，当然也是非常合适这一次的开发。</p>
 <p>我会梳理这一个月来，自己对架构的思考过程和踩过的坑。当然这一切都不一定是最佳的，所以希望能有更多的建议和讨论。</p>
 <p>例子所需库：Webpack、React、Immutable。其中Webpack用于前端构建，如果不清楚的同学可以看这里：<a href="http://yikaj.gitcafe.io/2015/06/18/webpack%E4%BD%93%E9%AA%8C/" target="_blank" rel="external">webpack前端构建体验</a>。</p>
@@ -166,7 +166,7 @@
 <p>但是我们来模拟一个场景，在一个数组里有10000个对象，我们把这个数组的数据渲染出来后，其中一个属性用于控制页面状态。</p>
 <p><strong>在这里我希望大家知道有一点就是，当父组件的状态state发生变化时，传入state的子组件都会进行重新渲染。</strong></p>
 <p>下面我们来模拟一下这种情况，一起来看看。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Created by YikaJ on 15/9/17.&#10; */&#10;&#39;use strict&#39;;&#10;var React = require(&#34;react&#34;);&#10;&#10;var App = React.createClass(&#123;&#10;&#10;    getInitialState()&#123;&#10;        return &#123;&#10;            list: this.props.dataArr&#10;        &#125;&#10;    &#125;,&#10;&#10;    // &#23545;&#25968;&#25454;&#30340;&#29366;&#24577;&#36827;&#34892;&#21464;&#26356;&#10;    toggleChecked(event)&#123;&#10;        let checked = event.target.checked;&#10;        let index = event.target.getAttribute(&#34;data-index&#34;);&#10;        let list = this.state.list;&#10;        list[index].checked = checked;&#10;&#10;        this.setState(&#123;list&#125;);&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        // &#23558;&#25968;&#32452;&#30340;&#25968;&#25454;&#28210;&#26579;&#20986;&#26469;&#10;        return (&#10;            &#60;ul&#62;&#10;                &#123;this.state.list.map((data, index)=&#62;&#123;&#10;                    return (&#10;                        &#60;ListItem data=&#123;data&#125;&#10;                            index=&#123;index&#125; key=&#123;data.name&#125;&#10;                            toggleChecked=&#123;this.toggleChecked&#125;&#10;                        /&#62;&#10;                    )&#10;                &#125;)&#125;&#10;            &#60;/ul&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#20195;&#34920;&#27599;&#19968;&#20010;&#23376;&#32452;&#20214;&#10;var ListItem = React.createClass(&#123;&#10;    render()&#123;&#10;        let data = this.props.data;&#10;        let index = this.props.index;&#10;        &#10;        // checkbox&#36873;&#25321;&#26694;&#26159;&#19968;&#20010;&#21463;&#38480;&#32452;&#20214;&#65292;&#29992;&#25968;&#25454;&#26469;&#20915;&#23450;&#23427;&#26159;&#21542;&#36873;&#20013;&#10;        return (&#10;            &#60;li&#62;&#10;                &#60;input type=&#34;checkbox&#34; data-index=&#123;index&#125; checked=&#123;data.checked&#125; onChange=&#123;this.props.toggleChecked&#125;/&#62;&#10;                &#60;span&#62;&#123;data.name&#125;&#60;/span&#62;&#10;            &#60;/li&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#26500;&#36896;&#19968;&#20010;2000&#20010;&#25968;&#25454;&#30340;&#25968;&#32452;&#10;let dataArr = [];&#10;for(let i = 0; i &#60; 2000; i++)&#123;&#10;    let checked = Math.random() &#60; 0.5;&#10;    dataArr.push(&#123;&#10;        name: i,&#10;        checked&#10;    &#125;);&#10;&#125;&#10;&#10;React.render(&#60;App dataArr=&#123;dataArr&#125;/&#62;, document.body);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Created by YikaJ on 15/9/17.&#10; */&#10;&#39;use strict&#39;;&#10;var React = require(&#34;react&#34;);&#10;&#10;var App = React.createClass(&#123;&#10;&#10;    getInitialState()&#123;&#10;        return &#123;&#10;            list: this.props.dataArr&#10;        &#125;&#10;    &#125;,&#10;&#10;    // &#23545;&#25968;&#25454;&#30340;&#29366;&#24577;&#36827;&#34892;&#21464;&#26356;&#10;    toggleChecked(event)&#123;&#10;        let checked = event.target.checked;&#10;        let index = event.target.getAttribute(&#34;data-index&#34;);&#10;        let list = this.state.list;&#10;        list[index].checked = checked;&#10;&#10;        this.setState(&#123;list&#125;);&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        // &#23558;&#25968;&#32452;&#30340;&#25968;&#25454;&#28210;&#26579;&#20986;&#26469;&#10;        return (&#10;            &#60;ul&#62;&#10;                &#123;this.state.list.map((data, index)=&#62;&#123;&#10;                    return (&#10;                        &#60;ListItem data=&#123;data&#125;&#10;                            index=&#123;index&#125; key=&#123;data.name&#125;&#10;                            toggleChecked=&#123;this.toggleChecked&#125;&#10;                        /&#62;&#10;                    )&#10;                &#125;)&#125;&#10;            &#60;/ul&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#20195;&#34920;&#27599;&#19968;&#20010;&#23376;&#32452;&#20214;&#10;var ListItem = React.createClass(&#123;&#10;    render()&#123;&#10;        let data = this.props.data;&#10;        let index = this.props.index;&#10;&#10;        // checkbox&#36873;&#25321;&#26694;&#26159;&#19968;&#20010;&#21463;&#38480;&#32452;&#20214;&#65292;&#29992;&#25968;&#25454;&#26469;&#20915;&#23450;&#23427;&#26159;&#21542;&#36873;&#20013;&#10;        return (&#10;            &#60;li&#62;&#10;                &#60;input type=&#34;checkbox&#34; data-index=&#123;index&#125; checked=&#123;data.checked&#125; onChange=&#123;this.props.toggleChecked&#125;/&#62;&#10;                &#60;span&#62;&#123;data.name&#125;&#60;/span&#62;&#10;            &#60;/li&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#26500;&#36896;&#19968;&#20010;2000&#20010;&#25968;&#25454;&#30340;&#25968;&#32452;&#10;let dataArr = [];&#10;for(let i = 0; i &#60; 2000; i++)&#123;&#10;    let checked = Math.random() &#60; 0.5;&#10;    dataArr.push(&#123;&#10;        name: i,&#10;        checked&#10;    &#125;);&#10;&#125;&#10;&#10;React.render(&#60;App dataArr=&#123;dataArr&#125;/&#62;, document.body);</span><br></pre></td></tr></table></figure>
 <p>这个就是我们的有性能问题的组件。当我们去点击选框时，因为父组件的state传到了子组件的props里，我们就会遇到10000个子组件重新渲染的情况。所以表现出来的情况就是，我点一下，等个一两秒那个框才真正被勾上。我相信用户在这一秒内肯定已经关掉页面了。</p>
 <a id="more"></a>
 <p>如果对React很熟悉的人，肯定知道一个生命周期的Hook，就是<code>shouldComponentUpdate(nextProps, nextState)</code>。这个API就是用来决定该组件是否重新Render。所以我们肯定很开心的说，只要属性的checked值不变，就不渲染呗！</p>
@@ -203,11 +203,11 @@
 <p><img src="http://images2015.cnblogs.com/blog/670552/201510/670552-20151026194800466-1123703744.png" alt=""></p>
 <hr>
 <p>当我们在<code>shouldComponentUpdate</code>里判断是否更新时，变化的数据是新的引用，而不变的数据是原来的引用，这样我们就可以非常轻松的判断新旧数据的差异，从而大大提升性能。那我们知道了这个Immutable可以很好的解决我们的痛点之后，我们该如何使用到我们的实际项目中呢？其实很简单的，就是数据初始化时，就让它变成Immutable数据，然后之后对数据的操作就可以参照一下文档了，这里我直接重写了demo，其实也就是把取值和赋值做个改变，我会用注释标识出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Created by YikaJ on 15/9/17.&#10; */&#10;&#39;use strict&#39;;&#10;var React = require(&#39;react&#39;);&#10;var Immutable = require(&#39;immutable&#39;);&#10;&#10;var App = React.createClass(&#123;&#10;&#10;    getInitialState()&#123;&#10;        return &#123;&#10;            // &#36825;&#37324;&#23558;&#20256;&#20837;&#30340;&#25968;&#25454;&#36716;&#21270;&#25104;Immutable&#25968;&#25454;&#10;            list: Immutable.fromJS(this.props.dataArr)&#10;        &#125;&#10;    &#125;,&#10;&#10;    // &#23545;&#25968;&#25454;&#30340;&#29366;&#24577;&#36827;&#34892;&#21464;&#26356;&#10;    toggleChecked(event)&#123;&#10;        let checked = event.target.checked;&#10;        let index = event.target.getAttribute(&#34;data-index&#34;);&#10;        &#10;        // &#36825;&#37324;&#19981;&#20877;&#26159;&#30452;&#25509;&#20462;&#25913;&#23545;&#35937;&#30340;checked&#30340;&#20540;&#20102;&#65292;&#32780;&#26159;&#36890;&#36807;setIn&#65292;&#20174;&#32780;&#33719;&#24471;&#19968;&#20010;&#26032;&#30340;list&#25968;&#25454;&#10;        let list = this.state.list.setIn([index, &#34;checked&#34;], checked);&#10;&#10;        this.setState(&#123;list&#125;);&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        return (&#10;            &#60;ul&#62;&#10;                &#123;this.state.list.map((data, index)=&#62;&#123;&#10;                    return (&#10;                        &#60;ListItem data=&#123;data&#125;&#10;                            index=&#123;index&#125; key=&#123;index&#125;&#10;                            toggleChecked=&#123;this.toggleChecked&#125;&#10;                        /&#62;&#10;                    )&#10;                &#125;)&#125;&#10;            &#60;/ul&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#20195;&#34920;&#27599;&#19968;&#20010;&#23376;&#32452;&#20214;&#10;var ListItem = React.createClass(&#123;&#10;&#10;    shouldComponentUpdate(nextProps)&#123;&#10;        // &#36825;&#37324;&#30452;&#25509;&#23545;&#20256;&#20837;&#30340;data&#36827;&#34892;&#26816;&#27979;&#65292;&#22240;&#20026;&#21482;&#38656;&#35201;&#26816;&#27979;&#23427;&#20204;&#30340;&#24341;&#29992;&#26159;&#21542;&#19968;&#33268;&#21363;&#21487;&#65292;&#25152;&#20197;&#24182;&#19981;&#24433;&#21709;&#24615;&#33021;&#12290;&#10;        return this.props.data !== nextProps.data;&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        let data = this.props.data;&#10;        let index = this.props.index;&#10;&#10;        // &#21462;&#20540;&#20063;&#19981;&#20877;&#26159;&#30452;&#25509;.&#20986;&#26469;&#65292;&#32780;&#26159;&#36890;&#36807;get&#25110;&#32773;getIn&#10;        return (&#10;            &#60;li&#62;&#10;                &#60;input type=&#34;checkbox&#34; data-index=&#123;index&#125; checked=&#123;data.get(&#34;checked&#34;)&#125; onChange=&#123;this.props.toggleChecked&#125;/&#62;&#10;                &#60;span&#62;&#123;data.get(&#34;name&#34;)&#125;&#60;/span&#62;&#10;            &#60;/li&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#26500;&#36896;&#19968;&#20010;2000&#20010;&#25968;&#25454;&#30340;&#25968;&#32452;&#10;let dataArr = [];&#10;for(let i = 0; i &#60; 2000; i++)&#123;&#10;    let checked = Math.random() &#60; 0.5;&#10;    dataArr.push(&#123;&#10;        name: i,&#10;        checked&#10;    &#125;);&#10;&#125;&#10;&#10;React.render(&#60;App dataArr=&#123;dataArr&#125;/&#62;, document.body);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Created by YikaJ on 15/9/17.&#10; */&#10;&#39;use strict&#39;;&#10;var React = require(&#39;react&#39;);&#10;var Immutable = require(&#39;immutable&#39;);&#10;&#10;var App = React.createClass(&#123;&#10;&#10;    getInitialState()&#123;&#10;        return &#123;&#10;            // &#36825;&#37324;&#23558;&#20256;&#20837;&#30340;&#25968;&#25454;&#36716;&#21270;&#25104;Immutable&#25968;&#25454;&#10;            list: Immutable.fromJS(this.props.dataArr)&#10;        &#125;&#10;    &#125;,&#10;&#10;    // &#23545;&#25968;&#25454;&#30340;&#29366;&#24577;&#36827;&#34892;&#21464;&#26356;&#10;    toggleChecked(event)&#123;&#10;        let checked = event.target.checked;&#10;        let index = event.target.getAttribute(&#34;data-index&#34;);&#10;&#10;        // &#36825;&#37324;&#19981;&#20877;&#26159;&#30452;&#25509;&#20462;&#25913;&#23545;&#35937;&#30340;checked&#30340;&#20540;&#20102;&#65292;&#32780;&#26159;&#36890;&#36807;setIn&#65292;&#20174;&#32780;&#33719;&#24471;&#19968;&#20010;&#26032;&#30340;list&#25968;&#25454;&#10;        let list = this.state.list.setIn([index, &#34;checked&#34;], checked);&#10;&#10;        this.setState(&#123;list&#125;);&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        return (&#10;            &#60;ul&#62;&#10;                &#123;this.state.list.map((data, index)=&#62;&#123;&#10;                    return (&#10;                        &#60;ListItem data=&#123;data&#125;&#10;                            index=&#123;index&#125; key=&#123;index&#125;&#10;                            toggleChecked=&#123;this.toggleChecked&#125;&#10;                        /&#62;&#10;                    )&#10;                &#125;)&#125;&#10;            &#60;/ul&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#20195;&#34920;&#27599;&#19968;&#20010;&#23376;&#32452;&#20214;&#10;var ListItem = React.createClass(&#123;&#10;&#10;    shouldComponentUpdate(nextProps)&#123;&#10;        // &#36825;&#37324;&#30452;&#25509;&#23545;&#20256;&#20837;&#30340;data&#36827;&#34892;&#26816;&#27979;&#65292;&#22240;&#20026;&#21482;&#38656;&#35201;&#26816;&#27979;&#23427;&#20204;&#30340;&#24341;&#29992;&#26159;&#21542;&#19968;&#33268;&#21363;&#21487;&#65292;&#25152;&#20197;&#24182;&#19981;&#24433;&#21709;&#24615;&#33021;&#12290;&#10;        return this.props.data !== nextProps.data;&#10;    &#125;,&#10;&#10;    render()&#123;&#10;        let data = this.props.data;&#10;        let index = this.props.index;&#10;&#10;        // &#21462;&#20540;&#20063;&#19981;&#20877;&#26159;&#30452;&#25509;.&#20986;&#26469;&#65292;&#32780;&#26159;&#36890;&#36807;get&#25110;&#32773;getIn&#10;        return (&#10;            &#60;li&#62;&#10;                &#60;input type=&#34;checkbox&#34; data-index=&#123;index&#125; checked=&#123;data.get(&#34;checked&#34;)&#125; onChange=&#123;this.props.toggleChecked&#125;/&#62;&#10;                &#60;span&#62;&#123;data.get(&#34;name&#34;)&#125;&#60;/span&#62;&#10;            &#60;/li&#62;&#10;        )&#10;    &#125;&#10;&#125;);&#10;&#10;// &#26500;&#36896;&#19968;&#20010;2000&#20010;&#25968;&#25454;&#30340;&#25968;&#32452;&#10;let dataArr = [];&#10;for(let i = 0; i &#60; 2000; i++)&#123;&#10;    let checked = Math.random() &#60; 0.5;&#10;    dataArr.push(&#123;&#10;        name: i,&#10;        checked&#10;    &#125;);&#10;&#125;&#10;&#10;React.render(&#60;App dataArr=&#123;dataArr&#125;/&#62;, document.body);</span><br></pre></td></tr></table></figure>
 <p>就这样，我们非常优雅的解决了引用类型带来的问题。其实Immutable的功能并不只这些。它内部提供了非常多种的数据结构以供使用，例如和ES6一致的Set，这种特殊的数组不会存有相同的值。相信利用好不同的数据结构，会非常有利于你构建复杂应用。</p>
 <h2 id="PureRenderMixin表示也要来打个酱油">PureRenderMixin表示也要来打个酱油</h2><hr>
 <p>这里插多个React.addons内添加的东西，在我一开始探索这些性能相关问题的时候，我就注意到了这个东西。它会自行为该组件增添<code>shouldComponentUpdate</code>，对现有的子组件的state和props进行判断。但是它只支持基本类型的浅度比较，所以实际开发时并不能直接拿来使用。<strong>但是！</strong>我们一旦使用了Immutable数据后，比较是否是同一指针这样的事情，自然就是浅比较，所以换句话而言，我们可以使用PureRenderMixin配合上Immutable，非常优雅的实现性能提升，而且我们也不用再手动去<code>shouldComponentUpdate</code>进行判断。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var React = require(&#34;react/addons&#34;);&#10;&#10;var ListItem = React.createClass(&#123;&#10;    mixins: [React.addons.PureRenderMixin],&#10;    &#10;    // .....&#20197;&#19979;&#20195;&#30721;&#30465;&#30053;&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var React = require(&#34;react/addons&#34;);&#10;&#10;var ListItem = React.createClass(&#123;&#10;    mixins: [React.addons.PureRenderMixin],&#10;&#10;    // .....&#20197;&#19979;&#20195;&#30721;&#30465;&#30053;&#10;&#125;);</span><br></pre></td></tr></table></figure>
 <h2 id="总结">总结</h2><hr>
 <p>我相信这次提供的方法，已经可以非常优雅的解决绝大部分的性能问题了。但如果还不行，那么你可能要对你的业务逻辑代码进行优化了。下一篇，我将会介绍一下<code>React-hot-loader</code>这一开发神器，它可以利用webpack的模块热插拔的特性，实时对浏览器的js进行无刷新的更新，非常的酷炫！我在配置它的过程中也摸了一些坑，所以希望能帮助大家跳过这个坑。相信如果能好好使用它，将会大大提升大家的开发效率。</p>
 
@@ -216,18 +216,24 @@
 
     <div class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/React/"> #React </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/14/(翻译)container component/">(翻译)Container Components</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/06/30/Chrome开发者工具不完全指南1/">（转）Chrome开发者工具不完全指南（一、基础功能篇）</a>
+              <a href="/2016/01/15/NodeJs通过async-await处理异步/">NodeJs通过async/await处理异步</a>
             
           </div>
         </div>
@@ -349,7 +355,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#React爬坑秘籍（一）——提升渲染性能"><span class="nav-number">1.</span> <span class="nav-text">React爬坑秘籍（一）——提升渲染性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#出现场景"><span class="nav-number">1.2.</span> <span class="nav-text">出现场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深拷贝表示只是路过打个酱油"><span class="nav-number">1.3.</span> <span class="nav-text">深拷贝表示只是路过打个酱油</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable_Data"><span class="nav-number">1.4.</span> <span class="nav-text">Immutable Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PureRenderMixin表示也要来打个酱油"><span class="nav-number">1.5.</span> <span class="nav-text">PureRenderMixin表示也要来打个酱油</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#出现场景"><span class="nav-number">2.</span> <span class="nav-text">出现场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深拷贝表示只是路过打个酱油"><span class="nav-number">3.</span> <span class="nav-text">深拷贝表示只是路过打个酱油</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable_Data"><span class="nav-number">4.</span> <span class="nav-text">Immutable Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PureRenderMixin表示也要来打个酱油"><span class="nav-number">5.</span> <span class="nav-text">PureRenderMixin表示也要来打个酱油</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -577,9 +583,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'YikaJ';
-      var disqus_identifier = '2015/10/26/React爬坑秘籍（一）——提升渲染性能/';
-      var disqus_title = '';
-      var disqus_url = 'http://yoursite.com/2015/10/26/React爬坑秘籍（一）——提升渲染性能/';
+      var disqus_identifier = '2016/10/26/React爬坑秘籍（一）——提升渲染性能/';
+      var disqus_title = 'React爬坑秘籍（一）——提升渲染性能';
+      var disqus_url = 'http://yoursite.com/2016/10/26/React爬坑秘籍（一）——提升渲染性能/';
 
       (function(){
         var dsq = document.createElement('script');
