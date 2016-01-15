@@ -127,6 +127,82 @@
           
           
             
+              <a class="post-title-link" href="/2016/01/15/NodeJs通过async-await处理异步/">
+                NodeJs通过async/await处理异步
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-15
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/01/15/NodeJs通过async-await处理异步/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/01/15/NodeJs通过async-await处理异步/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h2 id="场景">场景</h2><hr>
+<h3 id="远古时代">远古时代</h3><p>我们在编写express后台，经常要有许多异步IO的处理。在远古时代，我们都是用chunk函数处理，也就是我们最熟悉的那种默认第一个参数是<code>error</code>的函数。我们来模拟一个Mongo数据库的操作，感受一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongoDb.open(function(err, db)&#123;&#10;    if(!err)&#123;&#10;        db.collection(&#34;users&#34;, function(err, collection)&#123;&#10;            if(!err)&#123;&#10;                let person = &#123;name: &#34;yika&#34;, age: 20&#125;;&#10;                collection.insert(person, function(err, result)&#123;&#10;                    if(!err)&#123;&#10;                        console.log(result);&#10;                    &#125;&#10;                &#125;);&#10;            &#125;&#10;        &#125;)&#10;    &#125;&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<p>这个也就是被我们所诟病的<code>callback hell</code>，一堆横向金字塔，如果将回调拆分成函数，则会变得非常支离破碎。为了防止到恶心到大家，我甚至没有写关于错误的处理，正常来说，每一个异步的操作都需要都它的<code>error</code>进行相应的显示或处理的。</p>
+<h3 id="Promise时代">Promise时代</h3><p>后来进入了好一点的时代就是Promise，我们也可以称作链式操作。关于Promise，我也是之前有专门写过一系列的博文，有兴趣可以回头翻一下。这里来看看，将以上改写之后的状况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let person = &#123;name: &#34;yika&#34;&#125;;&#10;mongoDb&#10;    .open()&#10;    .then(function(database)&#123;&#10;      return database.collection(&#34;users&#34;);&#10;    &#125;)&#10;    .then(function(collection)&#123;&#10;      return collection.insert(person);&#10;    &#125;)&#10;    .then(function(result)&#123;&#10;      console.log(result);&#10;    &#125;)&#10;    .catch(function(e)&#123;&#10;      throw new Error(e);&#10;    &#125;)</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，我们将金字塔已经平铺成一条线状结构了。相比之前恶心难以维护的chunk函数，变成了promise函数，并且错误的处理也变得十分优雅。但是我们仍然不可忽视某些问题，例如我们必须忍受各个逻辑被一个又一个的<code>then()</code>包裹起来，每一个函数都有其独立的作用域，如果为了共享某个数据就必须挂在最外层，最重要的还是，它与我们熟悉的同步编程仍然有差别。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/01/15/NodeJs通过async-await处理异步/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2016/01/14/(翻译)container component/">
                 (翻译)Container Components
               </a>
@@ -162,9 +238,9 @@
 
       
         
-          <p>原文：<a href="https://medium.com/@learnreact/container-components-c0e67432e005#.771rxn8sr" target="_blank" rel="external">Container Components</a></p>
+          <p>原文：<a href="https://medium.com/@learnreact/container-components-c0e67432e005#.771rxn8sr">Container Components</a></p>
 <h1 id="Container_Components">Container Components</h1><p>在 React 模式上对我的代码有最深远影响的一个模式叫 <em>container component</em> 模式。</p>
-<p>在 React.js Conf 上，Jason Bonta 和我们讲了他们在Facebook上是如何建立高性能组件（High Performance Components）。Nestled 在这个演讲中讲的就是<a href="https://www.youtube.com/watch?v=KYzlpRvWZ6c&amp;t=1351" target="_blank" rel="external"> this gem about container components</a>。</p>
+<p>在 React.js Conf 上，Jason Bonta 和我们讲了他们在Facebook上是如何建立高性能组件（High Performance Components）。Nestled 在这个演讲中讲的就是<a href="https://www.youtube.com/watch?v=KYzlpRvWZ6c&amp;t=1351"> this gem about container components</a>。</p>
 <p>这个概念很简单：</p>
 <blockquote>
 <p>一个 container 只是做数据拉取然后渲染与它的 <em>corresponding</em> 子组件。就是这样。</p>
@@ -177,82 +253,11 @@
 <h2 id="可复用性">可复用性</h2><p>CommentList组件除了在同一精确的条件情况下才能复用。</p>
 <h2 id="数据结构">数据结构</h2><p>你希望的组件应该规定他们需要的数据类型的预期。PropTypes正是干这个的。</p>
 <p>我们的组件对数据结构要求很高但是没有办法说出这些要求。如果json的接口数据改变了，这个组件会不做出任何提示出错。（其实想说的就是，无法好好利用PropTypes来把控数据结构是否正确）</p>
-<h1 id="再来一次。这一次加上container">再来一次。这一次加上container</h1><p>首先，让我们将数据拉取的功能移到 <em>container</em> 组件上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// CommentListContainer.js&#10;&#10;class CommentListContainer extends React.Component&#123;&#10;    constructor()&#123;&#10;        super();&#10;        this.state = &#123; comments: [] &#125;&#10;    &#125;&#10;&#10;    componentDidMount() &#123;&#10;    $.ajax(&#123;&#10;      url: &#34;/my-comments.json&#34;,&#10;      dataType: &#39;json&#39;,&#10;      success: function(comments) &#123;&#10;        this.setState(&#123;comments: comments&#125;);&#10;      &#125;.bind(this)&#10;    &#125;);&#10;  &#125;&#10;&#10;  render() &#123;&#10;    return &#60;CommentList comments=&#123;this.state.comments&#125; /&#62;;&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>现在，我们将comments作为CommentList的prop重制一遍。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CommentList.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommentList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span> &#123;this.props.comments.map(renderComment)&#125; <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line">    renderComment(&#123;body, author&#125;) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">li</span>&gt;</span>&#123;body&#125;—&#123;author&#125;<span class="tag">&lt;/<span class="title">li</span>&gt;</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="最后，我们得到了什么？">最后，我们得到了什么？</h1><p>我们实际上得到了很多…</p>
-<p>我们分开了我们的数据拉取和渲染的关注点。</p>
-<p>我们使我们的CommentList组件可以复用了。</p>
-<p>我们可以让CommentList有能力使用PropTypes并且一旦出错便会提示。</p>
-<p>我是一个 container components 的大粉丝。他们让我的 React game 进步了很多，并且使我的组件更容易去阅读。尝试一下他们，并看一下<a href="https://www.youtube.com/watch?v=KYzlpRvWZ6c" target="_blank" rel="external">Jason的演讲</a>。太棒了！</p>
-<p>Carry on, nerds.</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/11/26/ss/">
-                ss
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-11-26
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/11/26/ss/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/11/26/ss/"></span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/01/14/(翻译)container component/">
+              阅读全文 &raquo;
             </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          
+          </div>
         
       
     </div>
@@ -584,7 +589,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

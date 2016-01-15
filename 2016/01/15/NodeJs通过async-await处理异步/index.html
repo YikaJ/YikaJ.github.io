@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="FE,前端工程师,NodeJs" />
+  <meta name="keywords" content="NodeJs,async/await," />
 
 
 
@@ -53,7 +53,7 @@
 
 
 
-  <title> ss // Yika J's Blog </title>
+  <title> NodeJs通过async/await处理异步 // Yika J's Blog </title>
 </head>
 
 <body>
@@ -125,7 +125,7 @@
           
           
             
-              ss
+              NodeJs通过async/await处理异步
             
           
         </h1>
@@ -133,7 +133,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-11-26
+          发表于 2016-01-15
         </span>
 
         
@@ -142,8 +142,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/11/26/ss/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/11/26/ss/"></span>
+            <a href="/2016/01/15/NodeJs通过async-await处理异步/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/01/15/NodeJs通过async-await处理异步/"></span>
             </a>
           </span>
           
@@ -157,24 +157,58 @@
       
 
       
-        
+        <h2 id="场景">场景</h2><hr>
+<h3 id="远古时代">远古时代</h3><p>我们在编写express后台，经常要有许多异步IO的处理。在远古时代，我们都是用chunk函数处理，也就是我们最熟悉的那种默认第一个参数是<code>error</code>的函数。我们来模拟一个Mongo数据库的操作，感受一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongoDb.open(function(err, db)&#123;&#10;    if(!err)&#123;&#10;        db.collection(&#34;users&#34;, function(err, collection)&#123;&#10;            if(!err)&#123;&#10;                let person = &#123;name: &#34;yika&#34;, age: 20&#125;;&#10;                collection.insert(person, function(err, result)&#123;&#10;                    if(!err)&#123;&#10;                        console.log(result);&#10;                    &#125;&#10;                &#125;);&#10;            &#125;&#10;        &#125;)&#10;    &#125;&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<p>这个也就是被我们所诟病的<code>callback hell</code>，一堆横向金字塔，如果将回调拆分成函数，则会变得非常支离破碎。为了防止到恶心到大家，我甚至没有写关于错误的处理，正常来说，每一个异步的操作都需要都它的<code>error</code>进行相应的显示或处理的。</p>
+<h3 id="Promise时代">Promise时代</h3><p>后来进入了好一点的时代就是Promise，我们也可以称作链式操作。关于Promise，我也是之前有专门写过一系列的博文，有兴趣可以回头翻一下。这里来看看，将以上改写之后的状况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let person = &#123;name: &#34;yika&#34;&#125;;&#10;mongoDb&#10;    .open()&#10;    .then(function(database)&#123;&#10;      return database.collection(&#34;users&#34;);&#10;    &#125;)&#10;    .then(function(collection)&#123;&#10;      return collection.insert(person);&#10;    &#125;)&#10;    .then(function(result)&#123;&#10;      console.log(result);&#10;    &#125;)&#10;    .catch(function(e)&#123;&#10;      throw new Error(e);&#10;    &#125;)</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，我们将金字塔已经平铺成一条线状结构了。相比之前恶心难以维护的chunk函数，变成了promise函数，并且错误的处理也变得十分优雅。但是我们仍然不可忽视某些问题，例如我们必须忍受各个逻辑被一个又一个的<code>then()</code>包裹起来，每一个函数都有其独立的作用域，如果为了共享某个数据就必须挂在最外层，最重要的还是，它与我们熟悉的同步编程仍然有差别。</p>
+<a id="more"></a>
+<h3 id="Generator时代">Generator时代</h3><p>TJ大神，借着ES6的Generator迭代器，最早实现了异步编程同步化的功能，也就是最为我们所熟知的<code>co</code>库。我们通过<code>co(function *(){})</code>可以使函数内部通过迭代器来控制。而<code>co</code>在这里则是充当了启动器的角色。关于Generator和co我在之前的博文也同样说过。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let co = require(&#34;co&#34;);&#10;&#10;co(function *()&#123;&#10;    let db, collection, result;&#10;    let person = &#123;name: &#34;yika&#34;&#125;;&#10;    try&#123;&#10;        db = yield mongoDb.open();&#10;        collection = yield db.collection(&#34;users&#34;);&#10;        result = yield collection.insert(person);&#10;    &#125;catch(e)&#123;&#10;        console.error(e.message);&#10;    &#125;&#10;    console.log(result);&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们已经非常接近同步编程了，在co包裹的函数内部，只有一个异步执行完毕，才会继续执行下面的代码。并且错误的处理也是通过<code>try and catch</code>进行实现的。不过我们不得不承认的是，迭代器终究不是为异步而存在的。里面的<code>yield</code>和<code>*</code>的语义也并不代表的就是异步函数标志。并且迭代器是需要co去驱动的，它和我们想象中的函数多少有一点点不同。</p>
+<h3 id="async/await时代">async/await时代</h3><p>我们关注到ES7的async/await，才发现这才是我们想要的！我们将上面的代码小小改写一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">async function insertData(person)&#123;&#10;    let db, collection, result;&#10;    try&#123;&#10;        db = await mongoDb.open();&#10;        collection = await db.collection(&#34;users&#34;);&#10;        result = await collection.insert(person);&#10;    &#125;catch(e)&#123;&#10;        console.error(e.message);&#10;    &#125;&#10;    console.log(result);&#10;&#125;&#10;&#10;insertData(&#123;name: &#34;yika&#34;&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们可以看到<code>inserData</code>是一个真正的函数，是我们可以直接去调用而无需启动器驱动的。当然内部我们也可以感受到处理<code>yield</code>变成了<code>await</code>以外，并没有很大区别。async/await，更符合我们异步编程的语义。</p>
+<p>那么问题来了，how to use it?</p>
+<h2 id="使用">使用</h2><hr>
+<p>我们一开始就说过，babel已经支持async的transform了，所以我们使用的时候引入babel就行。当然server端和browser端，可以有不同的处理方法。在开始之前我们需要引入以下的package，<code>preset-stage-3</code>里就有我们需要的async/await的编译文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install babel-core --save&#10;$ npm install babel-preset-es2015 --save&#10;$ npm install babel-preset-stage-3 --save</span><br></pre></td></tr></table></figure>
+<h3 id="Browser端">Browser端</h3><p>Babel一开始的出现就是为了让旧浏览器也能支持新的ES6特性，提升我们的开发体验。所以在Babel一开始就是可以通过babel-cli终端进行编译的。或者引入babel文件在浏览器端进行编译。当然这些都不是我最推荐的，所以我就带过不说啦。在前端静态资源配置里，webpack是现在比较好的解决方案，它支持静态资源的模块依赖，打包合并，还有语言的预处理，当然在这里我们就是指babel的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// webpack.config.js&#10;// &#30465;&#30053;&#19978;&#38754;&#30340;&#25991;&#20214;&#36755;&#20837;&#36755;&#20986;&#30340;&#37197;&#32622;&#65292;&#30452;&#25509;&#30475;&#27169;&#22359;&#21152;&#36733;&#22120;&#30340;&#37197;&#32622;&#10;module: &#123;&#10;    loaders: [&#10;        &#123;&#10;            test: /\.js$/,&#10;            exclude: /(node_modules|bower_components)/,&#10;            loader: &#34;babel&#34;,&#10;            query: &#123;&#10;              presets: [&#39;es2015&#39;, &#39;stage-3&#39;]&#10;            &#125;&#10;        &#125;,&#10;    ]&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就可以愉快的使用了。</p>
+<h3 id="Server端">Server端</h3><p>相对来说，后端比前端需要处理的异步IO地方多得多，也是更加需要这个。那我们在Server端又如何引入babel呢？</p>
+<p>其实最简单也是最麻烦的方法就是，直接把js文件通过babel编译出新的文件再来使用。当然也就免不了冗余文件了，眼不见心不烦，还是换一个方法吧。</p>
+<p>我们使用官方提供的require hook方法，顾名思义就是通过require进来后，接下来的文件进行require的时候都会经过Babel的处理。因为我们知道CommonJs是同步的模块依赖，所以也是可行的方法。我们需要多一个用于启动的js文件，一个真正执行程序的js文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// index.js&#10;// &#29992;&#20110;&#24341;&#20837;babel&#65292;&#24182;&#19988;&#21551;&#21160;app.js&#10;&#10;require(&#34;babel-core/register&#34;);&#10;require(&#34;./app.js&#34;);</span><br></pre></td></tr></table></figure>
+<p>配置完hook之后，我们就配置babel的.babelrc文件，它是一个json格式的文件。es2015看情况配置，如果是已经是Node5.0版本，就无需再进行编译。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;  &#34;presets&#34;: [&#34;stage-3&#34;, &#34;es2015&#34;]&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>最后我们的异步函数代码，写在app.js里即可。</p>
+
       
     </div>
 
     <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NodeJs/"> #NodeJs </a>
+          
+            <a href="/tags/async-await/"> #async/await </a>
+          
+        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/14/(翻译)container component/">(翻译)Container Components</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/10/26/React爬坑秘籍（一）——提升渲染性能/"></a>
+              <a href="/2016/01/14/(翻译)container component/">(翻译)Container Components</a>
             
           </div>
         </div>
@@ -252,7 +286,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -296,7 +330,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景"><span class="nav-number">1.</span> <span class="nav-text">场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#远古时代"><span class="nav-number">1.1.</span> <span class="nav-text">远古时代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise时代"><span class="nav-number">1.2.</span> <span class="nav-text">Promise时代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generator时代"><span class="nav-number">1.3.</span> <span class="nav-text">Generator时代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async/await时代"><span class="nav-number">1.4.</span> <span class="nav-text">async/await时代</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Browser端"><span class="nav-number">2.1.</span> <span class="nav-text">Browser端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端"><span class="nav-number">2.2.</span> <span class="nav-text">Server端</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -524,9 +558,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'YikaJ';
-      var disqus_identifier = '2015/11/26/ss/';
-      var disqus_title = 'ss';
-      var disqus_url = 'http://yoursite.com/2015/11/26/ss/';
+      var disqus_identifier = '2016/01/15/NodeJs通过async-await处理异步/';
+      var disqus_title = 'NodeJs通过async/await处理异步';
+      var disqus_url = 'http://yoursite.com/2016/01/15/NodeJs通过async-await处理异步/';
 
       (function(){
         var dsq = document.createElement('script');
