@@ -127,6 +127,98 @@
           
           
             
+              <a class="post-title-link" href="/2016/01/18/(翻译)Smart and Dumb Components/">
+                Smart and Dumb Components
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-18
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/01/18/(翻译)Smart and Dumb Components/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/01/18/(翻译)Smart and Dumb Components/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>原文链接：<a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.hjv4se5op">Smart and Dumb Components</a><br>作者：<a href="https://medium.com/@dan_abramov">Dan Abramov</a></p>
+<p>我发现当我写React应用时有一个非常有用的小模式(pattern)。如果你使用React有一段时间了，你应该早就发现它了。<a href="http://yikaj.gitcafe.io/2016/01/14/(%E7%BF%BB%E8%AF%91">这篇文章解释的很好</a>container%20component/)(我也翻译了)，不过我想加多一些观点。</p>
+<p>你会发现你的组件要是能<strong>分成两类</strong>，复用起来会变得更轻松。我称他们两类分别为<code>Smart</code>和<code>Dumb</code>，我也听说过<code>Fat</code>和<code>Skinny</code>，<code>Stateful</code>和<code>Pure</code>，<code>Screens</code>和<code>Components</code>等等。这些虽然不完全一样的，但本质是相类似的。</p>
+<p>我的 <strong>dumb</strong> 组件：</p>
+<ul>
+<li>对应用的其他部分没有依赖，例如 Flux actions 或者 stores。</li>
+<li>通过 <code>this.props.children</code>通常允许放在容器里。(Often allow containment via <em>this.props.children</em>)</li>
+<li>统一通过 props 来获取数据和回调函数。</li>
+<li>有 CSS 文件关联他们。</li>
+<li>几乎没有它们自己的 state。</li>
+<li>或许里面也使用了其他的 dumb 组件。</li>
+<li>例子：<em>Page</em>, <em>Sidebar</em>, <em>Story</em>, <em>UserInfo</em>, <em>List</em>.</li>
+</ul>
+<p>我的 <strong>smart</strong> 组件：</p>
+<ul>
+<li>包含了一个或多个 dumb 或者 smart 组件。</li>
+<li>在 Flux stores 中保存 state 并 通过 objects 的形式传递给 dumb 组件。</li>
+<li>访问 Flux actions 并作为回调函数提供给 dumb 组件。</li>
+<li>从来没有它们自己的 CSS 样式。</li>
+<li>几乎不通过它们自己生成 DOM ，用 dumb 组件来布局。</li>
+<li>例子：<em>UserPage</em>, <em>FollowersSidebar</em>, <em>StoryContainer</em>, <em>FollowedUserList</em>。</li>
+</ul>
+<p>我将它们两类放在不同的文件夹来让它们的区别更明确。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/01/18/(翻译)Smart and Dumb Components/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2016/01/14/(翻译)container component/">
                 (翻译)Container Components
               </a>
@@ -452,91 +544,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/06/18/React-Todos/">
-                React-Todos
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-18
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/06/18/React-Todos/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/06/18/React-Todos/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近学完React的最基本概念，闲下来的时候就自己写了一个Todo-List的小应用。这里做个简略的说明，给想好好学React的新手看。</p>
-<h1 id="开始之前">开始之前</h1><hr>
-<h2 id="学习前提">学习前提</h2><p>这里我用了webpackb做了babel和JSX预处理和模块打包。所以对React和一些ES2015（ES6）的语法要有一定的了解。我相信学习ES2015绝对是划算的，因为它是Js的规范。这里给出学习的地方，阮一峰老师的<a href="http://es6.ruanyifeng.com">ECMAScript 6 入门</a>或者babel的相关文档<a href="https://babeljs.io/docs/learn-es2015">Learn ES2015</a>。</p>
-<h2 id="功能需求">功能需求</h2><p>最后的实际效果：</p>
-<p><img src="http://i1.tietuku.com/a7a55341cff8d3d0.png" alt="效果图"></p>
-<p>我们需要做到的功能有：</p>
-<ul>
-<li>可以在最上面的input里，使用回车来添加任务。</li>
-<li>在中间的任务列表里，由checkbox来控制任务的状态。</li>
-<li>已完成的任务有一个<code>line-through</code>的样式。</li>
-<li>当鼠标移到每一个任务时，都会出现删除按钮提供删除。</li>
-<li>在底部有一个全选按钮，用于控制所有的任务状态。</li>
-<li>还有已完成与总数的显示。</li>
-<li>可以清空已完成的任务。</li>
-</ul>
-<h2 id="项目下载">项目下载</h2><p>上面就是一个Todo-List最基本的功能，而我们这次就是用React实现上述功能。例子在我的github上可以download下来，可以用作参考：<a href="https://github.com/YikaJ/react-todos">React-Todos</a></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/18/React-Todos/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -575,7 +582,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
